@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public static class IEnumerablePagedListExtensions
+    public static class EnumerablePagedListExtensions
     {
         public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> source, int pageIndex, int pageSize,
             int indexFrom = 0) => new PagedList<T>(source, pageIndex, pageSize, indexFrom);

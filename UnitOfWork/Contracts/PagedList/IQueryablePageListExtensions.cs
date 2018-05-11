@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
 
-    public static class IQueryablePageListExtensions
+    public static class QueryablePageListExtensions
     {
         public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
             int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default(CancellationToken))
