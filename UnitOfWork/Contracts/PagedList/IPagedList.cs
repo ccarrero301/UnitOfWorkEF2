@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public interface IPagedList<T>
+    public interface IPagedList<TEntity>
     {
         int IndexFrom { get; }
 
@@ -14,7 +14,7 @@
 
         int TotalPages { get; }
 
-        IList<T> Items { get; }
+        IList<TEntity> Items { get; }
 
         bool HasPreviousPage { get; }
 
