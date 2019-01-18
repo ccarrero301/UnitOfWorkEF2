@@ -15,16 +15,7 @@ namespace BlogConsole
     {
         private static void Main(string[] args)
         {
-            //Task.Run(AddBlogAsync);
-
-            PrintData();
-
-            //Task.Run(GetDataAsync);
-
-            //FindAndUpdate();
-
-            //FindAndUpdateAsync().Wait();
-
+            PrintDataAsync().Wait();
 
             Console.ResetColor();
             Console.WriteLine("Press Key to Enter...");
@@ -43,13 +34,13 @@ namespace BlogConsole
             }
         }
 
-        private static void PrintData()
+        private static async Task PrintDataAsync()
         {
-            var blogs = GetAllBlogs();
+            var blogs = await GetAllBlogs().ConfigureAwait(false);
 
             foreach (var blog in blogs.Items)
             {
-                PrintBlogs(blog);
+                PrintBlog(blog);
 
                 foreach (var post in blog.Posts)
                 {
@@ -59,12 +50,27 @@ namespace BlogConsole
                     {
                         PrintComment(comment);
                     }
-
                 }
             }
         }
 
-        private static void PrintBlogs(Blog blog)
+        private static async Task<IPagedList<Blog>> GetAllBlogs()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+
+                return await queryableRepository
+                    .GetPagedListAsync(predicate: null,
+                        orderBy: t => t.OrderBy(blog => blog.Id),
+                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
+                        pageIndex: 0,
+                        pageSize: 20
+                    ).ConfigureAwait(false);
+            }
+        }
+
+        private static void PrintBlog(Blog blog)
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -100,22 +106,6 @@ namespace BlogConsole
             Console.WriteLine($"\t\tComment Title :\t {comment.Title}");
             Console.WriteLine($"\t\tPost Content :\t {comment.Content}");
             Console.WriteLine($"\t\t****************************************");
-        }
-
-        private static IPagedList<Blog> GetAllBlogs()
-        {
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-
-                return queryableRepository
-                    .GetPagedList(predicate: null,
-                                  orderBy: t => t.OrderBy(blog => blog.Id),
-                                  include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
-                                  pageIndex: 0,
-                                  pageSize: 20
-                                  );
-            }
         }
 
         private static async Task GetDataAsync()
