@@ -15,7 +15,9 @@ namespace BlogConsole
     {
         private static void Main(string[] args)
         {
-            PrintDataAsync().Wait();
+            //PrintDataAsync().Wait();
+
+            PrintPosts(GetPostsThatHaveTheWordHusky().Result.Items);
 
             Console.ResetColor();
             Console.WriteLine("Press Key to Enter...");
@@ -70,6 +72,22 @@ namespace BlogConsole
             }
         }
 
+        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHusky()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Post>();
+
+                return await queryableRepository
+                    .GetPagedListAsync(predicate: post => post.Content.Contains("Huskies"),
+                        orderBy: t => t.OrderBy(post => post.Id),
+                        include: t => t.Include(post => post.Comments),
+                        pageIndex: 0,
+                        pageSize: 20
+                    ).ConfigureAwait(false);
+            }
+        }
+
         private static void PrintBlog(Blog blog)
         {
             Console.BackgroundColor = ConsoleColor.Black;
@@ -80,6 +98,14 @@ namespace BlogConsole
             Console.WriteLine($"Blog Id :\t {blog.Title}");
             Console.WriteLine($"Blog Id :\t {blog.Url}");
             Console.WriteLine($"****************************************");
+        }
+
+        private static void PrintPosts(IEnumerable<Post> posts)
+        {
+            foreach (var post in posts)
+            {
+                PrintPost(post);
+            }
         }
 
         private static void PrintPost(Post post)
