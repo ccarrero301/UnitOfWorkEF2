@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogConsole.Models
 {
+    using Microsoft.EntityFrameworkCore;
+
     public class BloggingContext : DbContext
     {
         public BloggingContext(DbContextOptions options)

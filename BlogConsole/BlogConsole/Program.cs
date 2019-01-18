@@ -1,5 +1,8 @@
-﻿namespace BlogConsole
+﻿using UnitOfWork.Contracts.PagedList;
+
+namespace BlogConsole
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,13 +17,18 @@
         {
             //Task.Run(AddBlogAsync);
 
-            //GetData();
+            PrintData();
 
             //Task.Run(GetDataAsync);
 
             //FindAndUpdate();
 
             //FindAndUpdateAsync().Wait();
+
+
+            Console.ResetColor();
+            Console.WriteLine("Press Key to Enter...");
+            Console.ReadKey();
         }
 
         private static async Task AddBlogAsync()
@@ -29,21 +37,84 @@
             {
                 var blogRepository = unitOfWork.GetRepository<Blog>();
 
-                await blogRepository.InsertAsync(GetSampleBlog());
+                await blogRepository.InsertAsync(GetSampleBlog()).ConfigureAwait(false);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
-        private static void GetData()
+        private static void PrintData()
+        {
+            var blogs = GetAllBlogs();
+
+            foreach (var blog in blogs.Items)
+            {
+                PrintBlogs(blog);
+
+                foreach (var post in blog.Posts)
+                {
+                    PrintPost(post);
+
+                    foreach (var comment in post.Comments)
+                    {
+                        PrintComment(comment);
+                    }
+
+                }
+            }
+        }
+
+        private static void PrintBlogs(Blog blog)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+            Console.WriteLine($"****************************************");
+            Console.WriteLine($"Blog Id :\t {blog.Id}");
+            Console.WriteLine($"Blog Id :\t {blog.Title}");
+            Console.WriteLine($"Blog Id :\t {blog.Url}");
+            Console.WriteLine($"****************************************");
+        }
+
+        private static void PrintPost(Post post)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+
+            Console.WriteLine($"\t****************************************");
+            Console.WriteLine($"\tPost Id :\t {post.Id}");
+            Console.WriteLine($"\tBlog Id :\t {post.BlogId}");
+            Console.WriteLine($"\tPost Title :\t {post.Title}");
+            Console.WriteLine($"\tPost Content :\t {post.Content}");
+            Console.WriteLine($"\t****************************************");
+        }
+
+        private static void PrintComment(Comment comment)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+            Console.WriteLine($"\t\t****************************************");
+            Console.WriteLine($"\t\tComment Id :\t {comment.Id}");
+            Console.WriteLine($"\t\tPost Id :\t {comment.PostId}");
+            Console.WriteLine($"\t\tComment Title :\t {comment.Title}");
+            Console.WriteLine($"\t\tPost Content :\t {comment.Content}");
+            Console.WriteLine($"\t\t****************************************");
+        }
+
+        private static IPagedList<Blog> GetAllBlogs()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
                 var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
 
-                var blogList = queryableRepository
-                    .GetPagedList(orderBy: t => t.OrderBy(blog => blog.Id),
-                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments));
+                return queryableRepository
+                    .GetPagedList(predicate: null,
+                                  orderBy: t => t.OrderBy(blog => blog.Id),
+                                  include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
+                                  pageIndex: 0,
+                                  pageSize: 20
+                                  );
             }
         }
 
@@ -55,7 +126,8 @@
 
                 var blogList = await queryableRepository
                     .GetPagedListAsync(orderBy: t => t.OrderBy(blog => blog.Id),
-                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments));
+                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments))
+                    .ConfigureAwait(false);
             }
         }
 
@@ -87,7 +159,7 @@
             using (var unitOfWork = GetUnitOfWork())
             {
                 var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-                selectedBlog = await queryableRepository.FindAsync(1);
+                selectedBlog = await queryableRepository.FindAsync(1).ConfigureAwait(false);
             }
 
             using (var unitOfWork = GetUnitOfWork())
@@ -97,111 +169,87 @@
 
                 repository.Update(selectedBlog);
 
-                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
-        private static IUnitOfWork<BloggingContext> GetUnitOfWork() => new UnitOfWork<BloggingContext>(
-            new DesignTimeDbContextFactory().CreateDbContext(
-                args: null));
+        private static IUnitOfWork<BloggingContext> GetUnitOfWork() =>
+            new UnitOfWork<BloggingContext>(new DesignTimeDbContextFactory().CreateDbContext(null));
 
         private static Blog GetSampleBlog()
         {
             return new Blog
             {
-                Url = "/a/" + 1,
-                Title = $"a{1}",
+                Url = "dogs.com",
+                Title = "This blog is about dogs!",
                 Posts = new List<Post>
                 {
                     new Post
                     {
-                        Title = "A",
-                        Content = "A's content",
+                        Title = "Huskies",
+                        Content = "Huskies are amazing",
                         Comments = new List<Comment>
                         {
                             new Comment
                             {
-                                Title = "A",
-                                Content = "A's content",
+                                Title = "I am Kira",
+                                Content = "Hi there... I'm crazy",
                             },
                             new Comment
                             {
-                                Title = "b",
-                                Content = "b's content",
+                                Title = "I am Fluffy",
+                                Content = "What's up, I have a lot of hair!",
                             },
                             new Comment
                             {
-                                Title = "c",
-                                Content = "c's content",
+                                Title = "I am Snow",
+                                Content = "I fancy white stuff",
                             }
                         },
                     },
                     new Post
                     {
-                        Title = "B",
-                        Content = "B's content",
+                        Title = "Border Collies",
+                        Content = "Collies are beautiful",
                         Comments = new List<Comment>
                         {
                             new Comment
                             {
-                                Title = "A",
-                                Content = "A's content",
+                                Title = "I am Chelsea",
+                                Content = "I have a bad mood!"
                             },
                             new Comment
                             {
-                                Title = "b",
-                                Content = "b's content",
+                                Title = "My name is Thunder",
+                                Content = "I am pretty fast..."
                             },
                             new Comment
                             {
-                                Title = "c",
-                                Content = "c's content",
+                                Title = "They call me Noisy",
+                                Content = "I bark a lot!!!"
                             }
                         },
                     },
                     new Post
                     {
-                        Title = "C",
-                        Content = "C's content",
+                        Title = "German Shephards",
+                        Content = "We are watching!",
                         Comments = new List<Comment>
                         {
                             new Comment
                             {
-                                Title = "A",
-                                Content = "A's content",
+                                Title = "My name is Pretty",
+                                Content = "I am a girl!",
                             },
                             new Comment
                             {
-                                Title = "b",
-                                Content = "b's content",
+                                Title = "I am Sussy",
+                                Content = "I am very brave!",
                             },
                             new Comment
                             {
-                                Title = "c",
-                                Content = "c's content",
-                            }
-                        },
-                    },
-                    new Post
-                    {
-                        Title = "D",
-                        Content = "D's content",
-                        Comments = new List<Comment>
-                        {
-                            new Comment
-                            {
-                                Title = "A",
-                                Content = "A's content",
-                            },
-                            new Comment
-                            {
-                                Title = "b",
-                                Content = "b's content",
-                            },
-                            new Comment
-                            {
-                                Title = "c",
-                                Content = "c's content",
+                                Title = "I am Doggy",
+                                Content = "I am the perfect dog!"
                             }
                         },
                     }
