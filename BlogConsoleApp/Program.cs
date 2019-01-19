@@ -24,6 +24,8 @@
             Console.ReadKey();
         }
 
+        #region Commands
+
         private static async Task AddBlogAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
@@ -35,107 +37,6 @@
                 await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
             }
         }
-
-        private static async Task PrintDataAsync()
-        {
-            var blogs = await GetAllBlogs().ConfigureAwait(false);
-
-            foreach (var blog in blogs.Items)
-            {
-                PrintBlog(blog);
-
-                foreach (var post in blog.Posts)
-                {
-                    PrintPost(post);
-
-                    foreach (var comment in post.Comments)
-                    {
-                        PrintComment(comment);
-                    }
-                }
-            }
-        }
-
-        private static void PrintBlog(Blog blog)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-
-            Console.WriteLine($"****************************************");
-            Console.WriteLine($"Blog Id :\t {blog.Id}");
-            Console.WriteLine($"Blog Title :\t {blog.Title}");
-            Console.WriteLine($"Blog Url :\t {blog.Url}");
-            Console.WriteLine($"****************************************");
-        }
-
-        private static void PrintPosts(IEnumerable<Post> posts)
-        {
-            foreach (var post in posts)
-            {
-                PrintPost(post);
-            }
-        }
-
-        private static void PrintPost(Post post)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-
-            Console.WriteLine($"\t****************************************");
-            Console.WriteLine($"\tBlog Id :\t {post.BlogId}");
-            Console.WriteLine($"\tPost Id :\t {post.Id}");
-            Console.WriteLine($"\tPost Title :\t {post.Title}");
-            Console.WriteLine($"\tPost Content :\t {post.Content}");
-            Console.WriteLine($"\t****************************************");
-        }
-
-        private static void PrintComment(Comment comment)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-
-            Console.WriteLine($"\t\t****************************************");
-            Console.WriteLine($"\t\tPost Id :\t\t {comment.PostId}");
-            Console.WriteLine($"\t\tComment Id :\t\t {comment.Id}");
-            Console.WriteLine($"\t\tComment Title :\t\t {comment.Title}");
-            Console.WriteLine($"\t\tComment :\t\t {comment.Content}");
-            Console.WriteLine($"\t\t****************************************");
-        }
-
-        private static async Task<IPagedList<Blog>> GetAllBlogs()
-        {
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-
-                return await queryableRepository
-                    .GetPagedListAsync(predicate: null,
-                        orderBy: t => t.OrderBy(blog => blog.Id),
-                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
-                        pageIndex: 0,
-                        pageSize: 20
-                    ).ConfigureAwait(false);
-            }
-        }
-
-        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHusky()
-        {
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Post>();
-
-                return await queryableRepository
-                    .GetPagedListAsync(predicate: post => post.Content.Contains("Huskies"),
-                        orderBy: t => t.OrderBy(post => post.Id),
-                        include: t => t.Include(post => post.Comments),
-                        pageIndex: 0,
-                        pageSize: 20
-                    ).ConfigureAwait(false);
-            }
-        }
-
-        private static IUnitOfWork<BloggingContext> GetUnitOfWork() =>
-            new UnitOfWork<BloggingContext>(new DesignTimeDbContextFactory().CreateDbContext(null));
 
         private static Blog GetSampleBlog()
         {
@@ -217,5 +118,124 @@
                 },
             };
         }
+
+        #endregion
+
+        #region Queries
+
+        private static async Task<IPagedList<Blog>> GetAllBlogs()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+
+                return await queryableRepository
+                    .GetPagedListAsync(predicate: null,
+                        orderBy: t => t.OrderBy(blog => blog.Id),
+                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
+                        pageIndex: 0,
+                        pageSize: 20
+                    ).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHusky()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Post>();
+
+                return await queryableRepository
+                    .GetPagedListAsync(predicate: post => post.Content.Contains("Huskies"),
+                        orderBy: t => t.OrderBy(post => post.Id),
+                        include: t => t.Include(post => post.Comments),
+                        pageIndex: 0,
+                        pageSize: 20
+                    ).ConfigureAwait(false);
+            }
+        }
+
+        #endregion
+
+        #region Entry Point Methods
+
+        private static async Task PrintDataAsync()
+        {
+            var blogs = await GetAllBlogs().ConfigureAwait(false);
+
+            foreach (var blog in blogs.Items)
+            {
+                PrintBlog(blog);
+
+                foreach (var post in blog.Posts)
+                {
+                    PrintPost(post);
+
+                    foreach (var comment in post.Comments)
+                    {
+                        PrintComment(comment);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Unit Of Work
+
+        private static IUnitOfWork<BloggingContext> GetUnitOfWork() =>
+            new UnitOfWork<BloggingContext>(new DesignTimeDbContextFactory().CreateDbContext(null));
+
+        #endregion
+
+        #region Output Utilities
+
+        private static void PrintBlog(Blog blog)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+            Console.WriteLine($"****************************************");
+            Console.WriteLine($"Blog Id :\t {blog.Id}");
+            Console.WriteLine($"Blog Title :\t {blog.Title}");
+            Console.WriteLine($"Blog Url :\t {blog.Url}");
+            Console.WriteLine($"****************************************");
+        }
+
+        private static void PrintPosts(IEnumerable<Post> posts)
+        {
+            foreach (var post in posts)
+            {
+                PrintPost(post);
+            }
+        }
+
+        private static void PrintPost(Post post)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+
+            Console.WriteLine($"\t****************************************");
+            Console.WriteLine($"\tBlog Id :\t {post.BlogId}");
+            Console.WriteLine($"\tPost Id :\t {post.Id}");
+            Console.WriteLine($"\tPost Title :\t {post.Title}");
+            Console.WriteLine($"\tPost Content :\t {post.Content}");
+            Console.WriteLine($"\t****************************************");
+        }
+
+        private static void PrintComment(Comment comment)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+            Console.WriteLine($"\t\t****************************************");
+            Console.WriteLine($"\t\tPost Id :\t\t {comment.PostId}");
+            Console.WriteLine($"\t\tComment Id :\t\t {comment.Id}");
+            Console.WriteLine($"\t\tComment Title :\t\t {comment.Title}");
+            Console.WriteLine($"\t\tComment :\t\t {comment.Content}");
+            Console.WriteLine($"\t\t****************************************");
+        }
+
+        #endregion
     }
 }
