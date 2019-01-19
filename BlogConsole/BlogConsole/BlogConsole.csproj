@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -110,17 +111,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DesignTimeDbContextFactory.cs" />
-    <Compile Include="Migrations\20171026022742_Initial.cs" />
-    <Compile Include="Migrations\20171026022742_Initial.designer.cs">
-      <DependentUpon>20171026022742_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20171026135938_Adding Comments DbSet.cs" />
-    <Compile Include="Migrations\20171026135938_Adding Comments DbSet.designer.cs">
-      <DependentUpon>20171026135938_Adding Comments DbSet.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\BloggingContextModelSnapshot.cs" />
-    <Compile Include="Models\BlogggingContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

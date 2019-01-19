@@ -1,4 +1,4 @@
-﻿namespace BlogConsole
+﻿namespace BlogConsoleApp.Factories
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;

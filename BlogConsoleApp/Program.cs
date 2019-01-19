@@ -1,25 +1,23 @@
-﻿using UnitOfWork.Contracts.PagedList;
-
-namespace BlogConsole
+﻿namespace BlogConsoleApp
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using UnitOfWork.Implementations;
+    using UnitOfWork.Contracts.PagedList;
     using UnitOfWork.Contracts.UnitOfWork;
+    using UnitOfWork.Implementations;
+    using Factories;
     using Models;
 
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
-            PrintDataAsync().Wait();
+            //await AddBlogAsync();
 
-            //PrintPosts(GetPostsThatHaveTheWordHusky().Result.Items);
-
-            //AddBlogAsync().Wait();
+            await PrintDataAsync();
 
             Console.ResetColor();
             Console.WriteLine("Press Key to Enter...");
@@ -58,6 +56,52 @@ namespace BlogConsole
             }
         }
 
+        private static void PrintBlog(Blog blog)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+            Console.WriteLine($"****************************************");
+            Console.WriteLine($"Blog Id :\t {blog.Id}");
+            Console.WriteLine($"Blog Title :\t {blog.Title}");
+            Console.WriteLine($"Blog Url :\t {blog.Url}");
+            Console.WriteLine($"****************************************");
+        }
+
+        private static void PrintPosts(IEnumerable<Post> posts)
+        {
+            foreach (var post in posts)
+            {
+                PrintPost(post);
+            }
+        }
+
+        private static void PrintPost(Post post)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+
+            Console.WriteLine($"\t****************************************");
+            Console.WriteLine($"\tBlog Id :\t {post.BlogId}");
+            Console.WriteLine($"\tPost Id :\t {post.Id}");
+            Console.WriteLine($"\tPost Title :\t {post.Title}");
+            Console.WriteLine($"\tPost Content :\t {post.Content}");
+            Console.WriteLine($"\t****************************************");
+        }
+
+        private static void PrintComment(Comment comment)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+            Console.WriteLine($"\t\t****************************************");
+            Console.WriteLine($"\t\tPost Id :\t\t {comment.PostId}");
+            Console.WriteLine($"\t\tComment Id :\t\t {comment.Id}");
+            Console.WriteLine($"\t\tComment Title :\t\t {comment.Title}");
+            Console.WriteLine($"\t\tComment :\t\t {comment.Content}");
+            Console.WriteLine($"\t\t****************************************");
+        }
+
         private static async Task<IPagedList<Blog>> GetAllBlogs()
         {
             using (var unitOfWork = GetUnitOfWork())
@@ -87,107 +131,6 @@ namespace BlogConsole
                         pageIndex: 0,
                         pageSize: 20
                     ).ConfigureAwait(false);
-            }
-        }
-
-        private static void PrintBlog(Blog blog)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-
-            Console.WriteLine($"****************************************");
-            Console.WriteLine($"Blog Id :\t {blog.Id}");
-            Console.WriteLine($"Blog Id :\t {blog.Title}");
-            Console.WriteLine($"Blog Id :\t {blog.Url}");
-            Console.WriteLine($"****************************************");
-        }
-
-        private static void PrintPosts(IEnumerable<Post> posts)
-        {
-            foreach (var post in posts)
-            {
-                PrintPost(post);
-            }
-        }
-
-        private static void PrintPost(Post post)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-
-            Console.WriteLine($"\t****************************************");
-            Console.WriteLine($"\tPost Id :\t {post.Id}");
-            Console.WriteLine($"\tBlog Id :\t {post.BlogId}");
-            Console.WriteLine($"\tPost Title :\t {post.Title}");
-            Console.WriteLine($"\tPost Content :\t {post.Content}");
-            Console.WriteLine($"\t****************************************");
-        }
-
-        private static void PrintComment(Comment comment)
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-
-            Console.WriteLine($"\t\t****************************************");
-            Console.WriteLine($"\t\tComment Id :\t {comment.Id}");
-            Console.WriteLine($"\t\tPost Id :\t {comment.PostId}");
-            Console.WriteLine($"\t\tComment Title :\t {comment.Title}");
-            Console.WriteLine($"\t\tPost Content :\t {comment.Content}");
-            Console.WriteLine($"\t\t****************************************");
-        }
-
-        private static async Task GetDataAsync()
-        {
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-
-                var blogList = await queryableRepository
-                    .GetPagedListAsync(orderBy: t => t.OrderBy(blog => blog.Id),
-                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments))
-                    .ConfigureAwait(false);
-            }
-        }
-
-        private static void FindAndUpdate()
-        {
-            Blog selectedBlog;
-
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-                selectedBlog = queryableRepository.Find(1);
-            }
-
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var repository = unitOfWork.GetRepository<Blog>();
-                selectedBlog.Title = "My title sync 123";
-
-                repository.Update(selectedBlog);
-
-                unitOfWork.SaveChanges();
-            }
-        }
-
-        private static async Task FindAndUpdateAsync()
-        {
-            Blog selectedBlog;
-
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-                selectedBlog = await queryableRepository.FindAsync(1).ConfigureAwait(false);
-            }
-
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var repository = unitOfWork.GetRepository<Blog>();
-                selectedBlog.Title = "My title sync 123";
-
-                repository.Update(selectedBlog);
-
-                await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 

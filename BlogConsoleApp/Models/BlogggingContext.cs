@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace BlogConsole.Models
+namespace BlogConsoleApp.Models
 {
     using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +15,7 @@ namespace BlogConsole.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.EnableAutoHistory();
+            modelBuilder.EnableAutoHistory(null);
 
             modelBuilder.Entity<Blog>().HasKey(t => t.Id);
             modelBuilder.Entity<Blog>().Property(t => t.Id).ValueGeneratedOnAdd();
@@ -37,31 +35,4 @@ namespace BlogConsole.Models
             modelBuilder.Entity<Comment>().Property(t => t.Id).ValueGeneratedOnAdd();
         }
     }
-}
-
-public class Blog
-{
-    public int Id { get; set; }
-    public string Url { get; set; }
-    public string Title { get; set; }
-    public IEnumerable<Post> Posts { get; set; }
-}
-
-public class Post
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public IEnumerable<Comment> Comments { get; set; }
-    public int BlogId { get; set; }
-    public Blog Blog { get; set; }
-}
-
-public class Comment
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public int PostId { get; set; }
-    public Post Post { get; set; }
 }
