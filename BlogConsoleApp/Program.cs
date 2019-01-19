@@ -17,12 +17,27 @@
         {
             //await AddBlogAsync();
 
-            await PrintDataAsync();
+            //var blogs = await GetAllBlogs(); 
+            //PrintBlogsPostAndComments(blogs.Items);
 
-            Console.ResetColor();
+            //var posts = await GetPostsThatHaveTheWordHuskyInPostContent();
+            //PrintPosts(posts.Items);
+
+            var blogs = await GetBlogsThatHaveTheWordAmInCommentContent();
+            PrintBlogsPostAndComments(blogs);
+
+            //await UpdateBlogByIdAsyncWithAutoHistory(8);
+
             Console.WriteLine("Press Key to Enter...");
             Console.ReadKey();
         }
+
+        #region Unit Of Work
+
+        private static IUnitOfWork<BloggingContext> GetUnitOfWork() =>
+            new UnitOfWork<BloggingContext>(new DesignTimeDbContextFactory().CreateDbContext(null));
+
+        #endregion
 
         #region Commands
 
@@ -34,7 +49,46 @@
 
                 await blogRepository.InsertAsync(GetSampleBlog()).ConfigureAwait(false);
 
+                await unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
+            }
+        }
+
+        private static async Task UpdateBlogByIdAsyncWithNoAutoHistory(int blogId)
+        {
+            Blog selectedBlog;
+
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+                selectedBlog = await queryableRepository.FindAsync(blogId).ConfigureAwait(false);
+            }
+
+            selectedBlog.Title = "This blog is about dogs and cats 2!";
+
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var repository = unitOfWork.GetRepository<Blog>();
+
+                repository.Update(selectedBlog);
+
                 await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static async Task UpdateBlogByIdAsyncWithAutoHistory(int blogId)
+        {          
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+                var selectedBlog = await queryableRepository.FindAsync(blogId).ConfigureAwait(false);
+
+                selectedBlog.Title = "This blog is about dogs and cats 3!";
+
+                var repository = unitOfWork.GetRepository<Blog>();
+
+                repository.Update(selectedBlog);
+
+                await unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
             }
         }
 
@@ -130,23 +184,27 @@
                 var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
 
                 return await queryableRepository
-                    .GetPagedListAsync(predicate: null,
-                        orderBy: t => t.OrderBy(blog => blog.Id),
-                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
+                    .GetPagedListAsync(
+                        selector: blog => blog,
+                        predicate: null,
+                        orderBy: order => order.OrderBy(blog => blog.Id),
+                        include: include => include.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
                         pageIndex: 0,
                         pageSize: 20
                     ).ConfigureAwait(false);
             }
         }
 
-        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHusky()
+        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHuskyInPostContent()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
                 var queryableRepository = unitOfWork.GetQueryableRepository<Post>();
 
                 return await queryableRepository
-                    .GetPagedListAsync(predicate: post => post.Content.Contains("Huskies"),
+                    .GetPagedListAsync(
+                        selector: post => post,
+                        predicate: post => post.Content.Contains("Huskies"),
                         orderBy: t => t.OrderBy(post => post.Id),
                         include: t => t.Include(post => post.Comments),
                         pageIndex: 0,
@@ -155,15 +213,38 @@
             }
         }
 
+        private static async Task<IEnumerable<Blog>> GetBlogsThatHaveTheWordAmInCommentContent()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Comment>();
+
+                var comments = await queryableRepository
+                    .GetPagedListAsync(
+                        selector: comment => comment,
+                        predicate: comment => comment.Content == "Hi there... I'm crazy",
+                        orderBy: t => t.OrderBy(post => post.Id),
+                        include: t => t.Include(comment => comment.Post).ThenInclude(post => post.Blog),
+                        pageIndex: 0,
+                        pageSize: 20
+                    ).ConfigureAwait(false);
+
+                var blogs = comments.Items.Select(comment => comment.Post.Blog).ToList();
+
+                return blogs;
+            }
+        }
+
         #endregion
 
-        #region Entry Point Methods
+        #region Output Utilities
 
-        private static async Task PrintDataAsync()
+        private static void PrintBlogsPostAndComments(IEnumerable<Blog> blogs)
         {
-            var blogs = await GetAllBlogs().ConfigureAwait(false);
+            Console.ResetColor();
+            Console.WriteLine($"*****************BLOGS - POSTS - COMMENTS***********************");
 
-            foreach (var blog in blogs.Items)
+            foreach (var blog in blogs)
             {
                 PrintBlog(blog);
 
@@ -177,18 +258,24 @@
                     }
                 }
             }
+
+            Console.ResetColor();
+            Console.WriteLine($"********************************************************************");
         }
 
-        #endregion
+        private static void PrintPosts(IEnumerable<Post> posts)
+        {
+            Console.ResetColor();
+            Console.WriteLine($"*****************POSTS***********************");
 
-        #region Unit Of Work
+            foreach (var post in posts)
+            {
+                PrintPost(post);
+            }
 
-        private static IUnitOfWork<BloggingContext> GetUnitOfWork() =>
-            new UnitOfWork<BloggingContext>(new DesignTimeDbContextFactory().CreateDbContext(null));
-
-        #endregion
-
-        #region Output Utilities
+            Console.ResetColor();
+            Console.WriteLine($"********************************************************************");
+        }
 
         private static void PrintBlog(Blog blog)
         {
@@ -200,14 +287,6 @@
             Console.WriteLine($"Blog Title :\t {blog.Title}");
             Console.WriteLine($"Blog Url :\t {blog.Url}");
             Console.WriteLine($"****************************************");
-        }
-
-        private static void PrintPosts(IEnumerable<Post> posts)
-        {
-            foreach (var post in posts)
-            {
-                PrintPost(post);
-            }
         }
 
         private static void PrintPost(Post post)

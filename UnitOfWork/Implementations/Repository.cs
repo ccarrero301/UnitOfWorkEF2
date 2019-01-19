@@ -20,19 +20,13 @@
             DbSet = DbContext.Set<TEntity>();
         }
 
-        public void Insert(TEntity entity)
-        {
-            DbSet.Add(entity);
-        }
+        public void Insert(TEntity entity) => DbSet.Add(entity);
 
         public void Insert(params TEntity[] entities) => DbSet.AddRange(entities);
 
         public void Insert(IEnumerable<TEntity> entities) => DbSet.AddRange(entities);
 
-        public Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return DbSet.AddAsync(entity, cancellationToken);
-        }
+        public Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken)) => DbSet.AddAsync(entity, cancellationToken);
 
         public Task InsertAsync(params TEntity[] entities) => DbSet.AddRangeAsync(entities);
 
@@ -40,10 +34,7 @@
             CancellationToken cancellationToken = default(CancellationToken)) =>
             DbSet.AddRangeAsync(entities, cancellationToken);
 
-        public void Update(TEntity entity)
-        {
-            DbSet.Update(entity);
-        }
+        public void Update(TEntity entity) => DbSet.Update(entity);
 
         public void Update(params TEntity[] entities) => DbSet.UpdateRange(entities);
 

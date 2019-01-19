@@ -1,11 +1,11 @@
 ﻿namespace UnitOfWork.Implementations
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Transactions;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Storage;
     using Contracts.Repository;
     using Contracts.UnitOfWork;
 
@@ -82,31 +82,19 @@
 
         public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
         {
-            // TransactionScope will be included in .NET Core v2.0
-            using (var transaction = DbContext.Database.BeginTransaction())
+            using (var ts = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                try
+                var count = 0;
+                foreach (var unitOfWork in unitOfWorks)
                 {
-                    var count = 0;
-                    foreach (var unitOfWork in unitOfWorks)
-                    {
-                        var uow = unitOfWork as UnitOfWork<DbContext>;
-                        uow.DbContext.Database.UseTransaction(transaction.GetDbTransaction());
-                        count += await uow.SaveChangesAsync(ensureAutoHistory);
-                    }
-
-                    count += await SaveChangesAsync(ensureAutoHistory);
-
-                    transaction.Commit();
-
-                    return count;
+                    count += await unitOfWork.SaveChangesAsync(ensureAutoHistory);
                 }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
 
-                    throw ex;
-                }
+                count += await SaveChangesAsync(ensureAutoHistory);
+
+                ts.Complete();
+
+                return count;
             }
         }
 
