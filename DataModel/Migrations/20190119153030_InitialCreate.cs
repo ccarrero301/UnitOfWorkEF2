@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BlogConsoleApp.Migrations
+namespace DataModel.Migrations
 {
     public partial class InitialCreate : Migration
     {

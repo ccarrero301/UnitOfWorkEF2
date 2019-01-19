@@ -28,25 +28,9 @@
             int pageSize = 20,
             bool disableTracking = true)
         {
-            IQueryable<TEntity> query = DbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            var query = GetQuery(disableTracking, include, predicate);
 
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            return orderBy != null
-                ? orderBy(query).ToPagedList(pageIndex, pageSize)
-                : query.ToPagedList(pageIndex, pageSize);
+            return orderBy?.Invoke(query).ToPagedList(pageIndex, pageSize) ?? query.ToPagedList(pageIndex, pageSize);
         }
 
         public Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null,
@@ -57,21 +41,7 @@
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            IQueryable<TEntity> query = DbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken) ??
                    query.ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
@@ -86,25 +56,10 @@
             bool disableTracking = true)
             where TResult : class
         {
-            IQueryable<TEntity> query = DbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            var query = GetQuery(disableTracking, include, predicate);
 
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            return orderBy != null
-                ? orderBy(query).Select(selector).ToPagedList(pageIndex, pageSize)
-                : query.Select(selector).ToPagedList(pageIndex, pageSize);
+            return orderBy?.Invoke(query).Select(selector).ToPagedList(pageIndex, pageSize) ??
+                   query.Select(selector).ToPagedList(pageIndex, pageSize);
         }
 
         public Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
@@ -117,22 +72,7 @@
             CancellationToken cancellationToken = default(CancellationToken))
             where TResult : class
         {
-            IQueryable<TEntity> query = DbSet;
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).Select(selector)
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken) ?? query.Select(selector)
@@ -144,24 +84,9 @@
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
         {
-            IQueryable<TEntity> query = DbSet;
+            var query = GetQuery(disableTracking, include, predicate);
 
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            return orderBy != null ? orderBy(query).FirstOrDefault() : query.FirstOrDefault();
+            return orderBy?.Invoke(query).FirstOrDefault() ?? query.FirstOrDefault();
         }
 
         public TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
@@ -170,22 +95,7 @@
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
         {
-            IQueryable<TEntity> query = DbSet;
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy != null
                 ? orderBy(query).Select(selector).FirstOrDefault()
@@ -203,5 +113,23 @@
 
         public int Count(Expression<Func<TEntity, bool>> predicate = null) =>
             predicate == null ? DbSet.Count() : DbSet.Count(predicate);
+
+        private IQueryable<TEntity> GetQuery(bool disableTracking,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include,
+            Expression<Func<TEntity, bool>> predicate = null)
+        {
+            IQueryable<TEntity> query = DbSet;
+
+            if (disableTracking)
+                query = query.AsNoTracking();
+
+            if (include != null)
+                query = include(query);
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
     }
 }

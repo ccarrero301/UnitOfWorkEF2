@@ -1,4 +1,4 @@
-namespace BlogConsoleApp.Models
+namespace DataModel.Models
 {
     using Microsoft.EntityFrameworkCore;
 
@@ -27,9 +27,9 @@ namespace BlogConsoleApp.Models
             modelBuilder.Entity<Post>().HasKey(t => t.Id);
             modelBuilder.Entity<Post>().Property(t => t.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Post>()
-                .HasMany(t => t.Comments)
-                .WithOne(t => t.Post)
-                .HasForeignKey(t => t.PostId);
+                .HasMany(post => post.Comments)
+                .WithOne(comment => comment.Post)
+                .HasForeignKey(comment => comment.PostId);
 
             modelBuilder.Entity<Comment>().HasKey(t => t.Id);
             modelBuilder.Entity<Comment>().Property(t => t.Id).ValueGeneratedOnAdd();

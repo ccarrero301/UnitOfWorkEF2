@@ -82,7 +82,7 @@
 
         public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
         {
-            using (var ts = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var count = 0;
                 foreach (var unitOfWork in unitOfWorks)
@@ -92,7 +92,7 @@
 
                 count += await SaveChangesAsync(ensureAutoHistory);
 
-                ts.Complete();
+                transactionScope.Complete();
 
                 return count;
             }

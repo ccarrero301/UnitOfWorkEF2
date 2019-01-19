@@ -1,4 +1,4 @@
-﻿namespace BlogConsoleApp.Factories
+﻿namespace DataModel.Factories
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;

@@ -8,8 +8,8 @@
     using UnitOfWork.Contracts.PagedList;
     using UnitOfWork.Contracts.UnitOfWork;
     using UnitOfWork.Implementations;
-    using Factories;
-    using Models;
+    using DataModel.Factories;
+    using DataModel.Models;
 
     internal class Program
     {
@@ -23,8 +23,12 @@
             //var posts = await GetPostsThatHaveTheWordHuskyInPostContent();
             //PrintPosts(posts.Items);
 
-            var blogs = await GetBlogsThatHaveTheWordAmInCommentContent();
-            PrintBlogsPostAndComments(blogs);
+            //var blogs = await GetBlogsThatHaveTheWordAmInCommentContent();
+            //PrintBlogsPostAndComments(blogs);
+
+            //var oneBlog = GetBlog();
+
+            var oneBlogTitle = GetBlogTitle();
 
             //await UpdateBlogByIdAsyncWithAutoHistory(8);
 
@@ -232,6 +236,38 @@
                 var blogs = comments.Items.Select(comment => comment.Post.Blog).ToList();
 
                 return blogs;
+            }
+        }
+
+        private static Blog GetBlog()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+
+                return queryableRepository
+                    .GetFirstOrDefault(
+                        selector: blog => blog,
+                        predicate: blog => blog.Id == 8,
+                        orderBy: t => t.OrderBy(blog => blog.Id),
+                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
+                    );
+            }
+        }
+
+        private static string GetBlogTitle()
+        {
+            using (var unitOfWork = GetUnitOfWork())
+            {
+                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
+
+                return queryableRepository
+                    .GetFirstOrDefault(
+                        selector: blog => blog.Title,
+                        predicate: blog => blog.Id == 8,
+                        orderBy: t => t.OrderBy(blog => blog.Id),
+                        include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
+                    );
             }
         }
 
