@@ -78,7 +78,7 @@
             }
 
             if(DbContext.ChangeTracker.HasChanges())
-                return await DbContext.SaveChangesAsync();
+                return await DbContext.SaveChangesAsync().ConfigureAwait(false);
 
             return 0;
         }
@@ -89,7 +89,7 @@
             {
                 var count = unitOfWorks.Sum(unitOfWork => unitOfWork.SaveChangesAsync(ensureAutoHistory).Result);
 
-                count += await SaveChangesAsync(ensureAutoHistory);
+                count += await SaveChangesAsync(ensureAutoHistory).ConfigureAwait(false);
 
                 transactionScope.Complete();
 

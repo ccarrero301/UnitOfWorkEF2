@@ -40,7 +40,7 @@
             Items = source.Skip((PageIndex - IndexFrom) * PageSize).Take(PageSize).ToList();
         }
 
-        internal PagedList() => Items = new T[0];
+        internal PagedList() => Items = Array.Empty<T>();
     }
 
     internal class PagedList<TSource, TResult> : IPagedList<TResult>

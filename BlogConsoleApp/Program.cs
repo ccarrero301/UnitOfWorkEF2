@@ -221,7 +221,7 @@
             }
         }
 
-        private static async Task<string> GetBlogTitle()
+        private static async Task<string> GetBlogTitleAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
