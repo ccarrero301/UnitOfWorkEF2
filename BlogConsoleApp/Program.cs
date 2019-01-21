@@ -28,7 +28,7 @@
 
             //var oneBlog = GetBlog();
 
-            var oneBlogTitle = GetBlogTitle();
+            var oneBlogTitle = await GetBlogTitle();
 
             //await UpdateBlogByIdAsyncWithAutoHistory(8);
 
@@ -239,14 +239,14 @@
             }
         }
 
-        private static Blog GetBlog()
+        private static Task<Blog> GetBlog()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
                 var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
 
                 return queryableRepository
-                    .GetFirstOrDefault(
+                    .GetFirstOrDefaultAsync(
                         selector: blog => blog,
                         predicate: blog => blog.Id == 8,
                         orderBy: t => t.OrderBy(blog => blog.Id),
@@ -255,14 +255,14 @@
             }
         }
 
-        private static string GetBlogTitle()
+        private static async Task<string> GetBlogTitle()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
                 var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
 
-                return queryableRepository
-                    .GetFirstOrDefault(
+                return await queryableRepository
+                    .GetFirstOrDefaultAsync(
                         selector: blog => blog.Title,
                         predicate: blog => blog.Id == 8,
                         orderBy: t => t.OrderBy(blog => blog.Id),
