@@ -81,5 +81,14 @@
                     include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
                 );
         }
+
+        public Task<int> AddBlogAsync(Blog blog)
+        {
+            var blogRepository = _unitOfWork.GetRepository<Blog>();
+
+            blogRepository.Insert(blog);
+
+            return _unitOfWork.SaveChangesAsync();
+        }
     }
 }

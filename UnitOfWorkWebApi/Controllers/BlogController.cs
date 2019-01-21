@@ -66,5 +66,15 @@
 
             return Ok(blog);
         }
+
+        [HttpPost]
+        [Route("Add")]
+        [Produces(typeof(int))]
+        public async Task<IActionResult> AddBlog(Blog blog)
+        {
+            var numberOfRecords = await _blogService.AddBlogAsync(blog).ConfigureAwait(false);
+
+            return Ok(numberOfRecords);
+        }
     }
 }

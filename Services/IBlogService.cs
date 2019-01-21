@@ -15,5 +15,7 @@
         Task<Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId);
 
         Task<Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId);
+
+        Task<int> AddBlogAsync(Blog blog);
     }
 }
