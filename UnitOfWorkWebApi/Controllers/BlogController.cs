@@ -67,5 +67,15 @@
 
             return Ok(blog);
         }
+
+        [HttpPatch]
+        [Route("{id:int}/post")]
+        [Produces(typeof(int))]
+        public async Task<IActionResult> AddPostToBlog(int id, Post post)
+        {
+            var blog = await _blogService.AddPostToBlog(id, post);
+
+            return Ok(blog);
+        }
     }
 }

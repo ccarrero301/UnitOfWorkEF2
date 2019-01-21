@@ -18,9 +18,9 @@
 
         public async Task<IEnumerable<Blog>> GetAllBlogs()
         {
-            var blogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            var blogsPagedList = await blogRepository
+            var blogsPagedList = await queryableBlogRepository
                 .GetPagedListAsync(
                     selector: blog => blog,
                     predicate: null,
@@ -35,9 +35,9 @@
 
         public Task<string> GetBlogTitle(int blogId)
         {
-            var blogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            return blogRepository
+            return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     selector: blog => blog.Title,
                     predicate: blog => blog.Id == blogId,
@@ -48,9 +48,9 @@
 
         public Task<Blog> GetBlogNotIncludingPostsAndComments(int blogId)
         {
-            var blogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            return blogRepository
+            return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     predicate: blog => blog.Id == blogId,
                     orderBy: null,
@@ -60,9 +60,9 @@
 
         public Task<Blog> GetBlogIncludingPostsAndNotIncludingComments(int blogId)
         {
-            var blogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            return blogRepository
+            return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     predicate: blog => blog.Id == blogId,
                     orderBy: null,
@@ -72,14 +72,30 @@
 
         public Task<Blog> GetBlogIncludingPostsAndComments(int blogId)
         {
-            var blogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            return blogRepository
+            return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     predicate: blog => blog.Id == blogId,
                     orderBy: null,
                     include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
                 );
+        }
+
+        public async Task<int> AddPostToBlog(int blogId, Post post)
+        {
+            var blogRepository = _unitOfWork.GetRepository<Blog>();
+
+            var blog = await GetBlogIncludingPostsAndComments(blogId);
+
+            var posts = blog.Posts.ToList();
+            posts.Add(post);
+
+            blog.Posts = posts;
+
+            blogRepository.Update(blog);
+
+            return await _unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
         }
     }
 }
