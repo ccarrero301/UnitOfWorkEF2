@@ -84,18 +84,11 @@
 
         public async Task<int> AddPostToBlog(int blogId, Post post)
         {
-            var blogRepository = _unitOfWork.GetRepository<Blog>();
+            var postRepository = _unitOfWork.GetRepository<Post>();
 
-            var blog = await GetBlogIncludingPostsAndComments(blogId);
+            post.BlogId = blogId;
 
-            blogRepository.Attach(blog);
-
-            var posts = blog.Posts.ToList();
-            posts.Add(post);
-
-            blog.Posts = posts;
-
-            blogRepository.Update(blog);
+            postRepository.Insert(post);
 
             return await _unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
         }
