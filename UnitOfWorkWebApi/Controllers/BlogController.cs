@@ -1,7 +1,6 @@
 ﻿namespace UnitOfWorkWebApi.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using DataModel.Models;
     using Microsoft.AspNetCore.Mvc;
@@ -19,13 +18,13 @@
         }
 
         [HttpGet]
-        [Route("All")]
+        [Route("all")]
         [Produces(typeof(IEnumerable<Blog>))]
         public async Task<IActionResult> GetAllBlogs()
         {
-            var blogs = await _blogService.GetAllBlogs();
+            var blogs = await _blogService.GetAllBlogsAsync().ConfigureAwait(false);
 
-            return Ok(blogs.ToList());
+            return Ok(blogs);
         }
 
         [HttpGet]
@@ -33,7 +32,7 @@
         [Produces(typeof(string))]
         public async Task<IActionResult> GetBlogTitleById(int id)
         {
-            var blogTitle = await _blogService.GetBlogTitle(id);
+            var blogTitle = await _blogService.GetBlogTitleAsync(id).ConfigureAwait(false);
 
             return Ok(blogTitle);
         }
@@ -43,7 +42,7 @@
         [Produces(typeof(Blog))]
         public async Task<IActionResult> GetBlogNotIncludingPostsAndComments(int id)
         {
-            var blog = await _blogService.GetBlogNotIncludingPostsAndComments(id);
+            var blog = await _blogService.GetBlogNotIncludingPostsAndCommentsAsync(id).ConfigureAwait(false);
 
             return Ok(blog);
         }
@@ -53,7 +52,7 @@
         [Produces(typeof(Blog))]
         public async Task<IActionResult> GetBlogIncludingPostsAndNotIncludingComments(int id)
         {
-            var blog = await _blogService.GetBlogIncludingPostsAndNotIncludingComments(id);
+            var blog = await _blogService.GetBlogIncludingPostsAndNotIncludingCommentsAsync(id).ConfigureAwait(false);
 
             return Ok(blog);
         }
@@ -63,17 +62,7 @@
         [Produces(typeof(Blog))]
         public async Task<IActionResult> GetBlogIncludingPostsAndComments(int id)
         {
-            var blog = await _blogService.GetBlogIncludingPostsAndComments(id);
-
-            return Ok(blog);
-        }
-
-        [HttpPatch]
-        [Route("{id:int}/post")]
-        [Produces(typeof(int))]
-        public async Task<IActionResult> AddPostToBlog(int id, Post post)
-        {
-            var blog = await _blogService.AddPostToBlog(id, post);
+            var blog = await _blogService.GetBlogIncludingPostsAndCommentsAsync(id).ConfigureAwait(false);
 
             return Ok(blog);
         }

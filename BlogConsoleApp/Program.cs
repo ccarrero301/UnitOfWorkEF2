@@ -15,23 +15,6 @@
     {
         private static async Task Main(string[] args)
         {
-            //await AddBlogAsync();
-
-            //var blogs = await GetAllBlogs(); 
-            //PrintBlogsPostAndComments(blogs.Items);
-
-            //var posts = await GetPostsThatHaveTheWordHuskyInPostContent();
-            //PrintPosts(posts.Items);
-
-            //var blogs = await GetBlogsThatHaveTheWordAmInCommentContent();
-            //PrintBlogsPostAndComments(blogs);
-
-            //var oneBlog = GetBlog();
-
-            var oneBlogTitle = await GetBlogTitle();
-
-            //await UpdateBlogByIdAsyncWithAutoHistory(8);
-
             Console.WriteLine("Press Key to Enter...");
             Console.ReadKey();
         }
@@ -57,7 +40,7 @@
             }
         }
 
-        private static async Task UpdateBlogByIdAsyncWithNoAutoHistory(int blogId)
+        private static async Task UpdateBlogByIdAsync(int blogId)
         {
             Blog selectedBlog;
 
@@ -76,23 +59,6 @@
                 repository.Update(selectedBlog);
 
                 await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
-            }
-        }
-
-        private static async Task UpdateBlogByIdAsyncWithAutoHistory(int blogId)
-        {          
-            using (var unitOfWork = GetUnitOfWork())
-            {
-                var queryableRepository = unitOfWork.GetQueryableRepository<Blog>();
-                var selectedBlog = await queryableRepository.FindAsync(blogId).ConfigureAwait(false);
-
-                selectedBlog.Title = "This blog is about dogs and cats 3!";
-
-                var repository = unitOfWork.GetRepository<Blog>();
-
-                repository.Update(selectedBlog);
-
-                await unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
             }
         }
 
@@ -181,7 +147,7 @@
 
         #region Queries
 
-        private static async Task<IPagedList<Blog>> GetAllBlogs()
+        private static async Task<IPagedList<Blog>> GetAllBlogsAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
@@ -199,7 +165,7 @@
             }
         }
 
-        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHuskyInPostContent()
+        private static async Task<IPagedList<Post>> GetPostsThatHaveTheWordHuskyInPostContentAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
@@ -217,7 +183,7 @@
             }
         }
 
-        private static async Task<IEnumerable<Blog>> GetBlogsThatHaveTheWordAmInCommentContent()
+        private static async Task<IEnumerable<Blog>> GetBlogsThatHaveTheWordAmInCommentContentAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
@@ -239,7 +205,7 @@
             }
         }
 
-        private static Task<Blog> GetBlog()
+        private static Task<Blog> GetBlogAsync()
         {
             using (var unitOfWork = GetUnitOfWork())
             {
@@ -267,7 +233,7 @@
                         predicate: blog => blog.Id == 8,
                         orderBy: t => t.OrderBy(blog => blog.Id),
                         include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
-                    );
+                    ).ConfigureAwait(false);
             }
         }
 

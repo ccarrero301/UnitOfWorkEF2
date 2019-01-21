@@ -16,7 +16,7 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Blog>> GetAllBlogs()
+        public async Task<IEnumerable<Blog>> GetAllBlogsAsync()
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
@@ -28,12 +28,12 @@
                     include: include => include.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
                     pageIndex: 0,
                     pageSize: 20
-                );
+                ).ConfigureAwait(false);
 
             return blogsPagedList.Items;
         }
 
-        public Task<string> GetBlogTitle(int blogId)
+        public Task<string> GetBlogTitleAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
@@ -46,7 +46,7 @@
                 );
         }
 
-        public Task<Blog> GetBlogNotIncludingPostsAndComments(int blogId)
+        public Task<Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
@@ -58,7 +58,7 @@
                 );
         }
 
-        public Task<Blog> GetBlogIncludingPostsAndNotIncludingComments(int blogId)
+        public Task<Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
@@ -70,7 +70,7 @@
                 );
         }
 
-        public Task<Blog> GetBlogIncludingPostsAndComments(int blogId)
+        public Task<Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
@@ -80,17 +80,6 @@
                     orderBy: null,
                     include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
                 );
-        }
-
-        public async Task<int> AddPostToBlog(int blogId, Post post)
-        {
-            var postRepository = _unitOfWork.GetRepository<Post>();
-
-            post.BlogId = blogId;
-
-            postRepository.Insert(post);
-
-            return await _unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
         }
     }
 }
