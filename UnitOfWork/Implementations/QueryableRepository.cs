@@ -79,17 +79,17 @@
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
 
-        public TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null,
+        public Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
         {
             var query = GetQuery(disableTracking, include, predicate);
 
-            return orderBy?.Invoke(query).FirstOrDefault() ?? query.FirstOrDefault();
+            return orderBy?.Invoke(query).FirstOrDefaultAsync() ?? query.FirstOrDefaultAsync();
         }
 
-        public TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+        public Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
@@ -98,8 +98,8 @@
             var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy != null
-                ? orderBy(query).Select(selector).FirstOrDefault()
-                : query.Select(selector).FirstOrDefault();
+                ? orderBy(query).Select(selector).FirstOrDefaultAsync()
+                : query.Select(selector).FirstOrDefaultAsync();
         }
 
         public IQueryable<TEntity> FromSql(string sql, params object[] parameters) => DbSet.FromSql(sql, parameters);

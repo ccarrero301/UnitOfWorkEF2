@@ -77,18 +77,17 @@
                 DbContext.EnsureAutoHistory();
             }
 
-            return await DbContext.SaveChangesAsync();
+            if(DbContext.ChangeTracker.HasChanges())
+                return await DbContext.SaveChangesAsync();
+
+            return 0;
         }
 
         public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
         {
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var count = 0;
-                foreach (var unitOfWork in unitOfWorks)
-                {
-                    count += await unitOfWork.SaveChangesAsync(ensureAutoHistory);
-                }
+                var count = unitOfWorks.Sum(unitOfWork => unitOfWork.SaveChangesAsync(ensureAutoHistory).Result);
 
                 count += await SaveChangesAsync(ensureAutoHistory);
 
