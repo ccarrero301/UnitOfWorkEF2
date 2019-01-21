@@ -42,12 +42,12 @@
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken)) where TResult : class;
 
-        TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null,
+        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true);
 
-        TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+        Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
