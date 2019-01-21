@@ -88,6 +88,8 @@
 
             var blog = await GetBlogIncludingPostsAndComments(blogId);
 
+            blogRepository.Attach(blog);
+
             var posts = blog.Posts.ToList();
             posts.Add(post);
 

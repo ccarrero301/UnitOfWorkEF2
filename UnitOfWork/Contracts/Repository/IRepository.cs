@@ -19,6 +19,8 @@
         Task InsertAsync(IEnumerable<TEntity> entities,
             CancellationToken cancellationToken = default(CancellationToken));
 
+        void Attach(TEntity entity);
+
         void Update(TEntity entity);
 
         void Update(params TEntity[] entities);

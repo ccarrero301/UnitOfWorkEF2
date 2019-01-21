@@ -34,6 +34,8 @@
             CancellationToken cancellationToken = default(CancellationToken)) =>
             DbSet.AddRangeAsync(entities, cancellationToken);
 
+        public void Attach(TEntity entity) => DbSet.Attach(entity);
+
         public void Update(TEntity entity) => DbSet.Update(entity);
 
         public void Update(params TEntity[] entities) => DbSet.UpdateRange(entities);
