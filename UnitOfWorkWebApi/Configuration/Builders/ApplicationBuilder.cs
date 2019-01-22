@@ -14,6 +14,8 @@
 
             applicationBuilder.UseCustomExceptionHandlerBuilder(log);
 
+            applicationBuilder.UseSwaggerBuilder();
+
             applicationBuilder.UseMvcBuilder();
         }
     }

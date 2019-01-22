@@ -12,6 +12,8 @@
 
             services.InjectServices();
 
+            services.ConfigureSwagger();
+
             services.ConfigureMvc();
         }
     }
