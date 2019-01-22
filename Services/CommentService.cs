@@ -4,20 +4,20 @@
     using UnitOfWork.Contracts.UnitOfWork;
     using DataModel.Models;
 
-    public class PostService : IPostService
+    public class CommentService : ICommentService
     {
         private readonly IUnitOfWork<BloggingContext> _unitOfWork;
 
-        public PostService(IUnitOfWork<BloggingContext> unitOfWork)
+        public CommentService(IUnitOfWork<BloggingContext> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> AddPostToBlogAsync(Post post)
+        public Task<int> AddCommentToPostAsync(Comment comment)
         {
-            var postRepository = _unitOfWork.GetRepository<Post>();
+            var commentRepository = _unitOfWork.GetRepository<Comment>();
 
-            postRepository.Insert(post);
+            commentRepository.Insert(comment);
 
             return _unitOfWork.SaveChangesAsync();
         }
