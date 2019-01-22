@@ -2,60 +2,24 @@
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using UnitOfWork.Contracts.Repository;
-    using UnitOfWork.Contracts.UnitOfWork;
-    using UnitOfWork.Implementations;
-    using DataModel.Models;
-    using Services;
-    using Newtonsoft.Json;
-    
+    using Configuration.Builders;
+    using Configuration.InternalServices;
+
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public ISettings Settings { get; }
+
+        public ILog Log { get; }
+
+        public Startup(ISettings settings, ILog log)
         {
-            Configuration = configuration;
+            Settings = settings;
+            Log = log;
         }
 
-        public IConfiguration Configuration { get; }
+        public void ConfigureServices(IServiceCollection services) => services.ConfigureServices(Settings);
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<BloggingContext>(options =>
-                options.UseSqlServer(
-                    @"Server=(localdb)\mssqllocaldb;Database=Blogs.AspNetCore;Trusted_Connection=True;"));
-
-            services.AddScoped<IRepositoryFactory, UnitOfWork<BloggingContext>>();
-            services.AddScoped<IUnitOfWork<BloggingContext>, UnitOfWork<BloggingContext>>();
-
-            services.AddScoped<IBlogService, BlogService>();
-            services.AddScoped<IPostService, PostService>();
-            services.AddScoped<ICommentService, CommentService>();
-
-            services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseMvc();
-        }
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env) => app.ConfigureApplication(env, Log);
     }
 }

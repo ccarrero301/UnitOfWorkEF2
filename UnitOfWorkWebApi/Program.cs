@@ -1,24 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-
-namespace UnitOfWorkWebApi
+﻿namespace UnitOfWorkWebApi
 {
+    using System;
+    using System.IO;
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Configuration;
+    using Configuration.InternalServices;
+
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main(string[] args) => CreateWebHostBuilder(args).Build().Run();
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile($"appsettings.{environment}.json", false, true).Build();
+
+            return ConfigureStartUpServices(args, configuration)
+                .UseStartup<Startup>();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        private static IWebHostBuilder ConfigureStartUpServices(string[] args, IConfiguration configuration) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .ConfigureServices(services =>
+                {
+                    services.AddSingleton<ISettings>(provider => new ApplicationSettings(configuration));
+                    services.AddSingleton<ILog, TextFileLog>();
+                });
     }
 }
