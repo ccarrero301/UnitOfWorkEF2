@@ -1,9 +1,9 @@
-﻿namespace UnitOfWorkWebApi.Configuration.Extensions.Services
+﻿namespace UnitOfWorkWebApi.Configuration.Middlewares
 {
     using Microsoft.Extensions.DependencyInjection;
-    using global::Services;
+    using Services;
 
-    public static class ServiceInjectorExtension
+    public static class ServicesInjectorExtension
     {
         public static void InjectServices(this IServiceCollection services)
         {

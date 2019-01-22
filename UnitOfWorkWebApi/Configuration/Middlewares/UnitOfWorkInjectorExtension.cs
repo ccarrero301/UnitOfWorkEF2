@@ -1,4 +1,4 @@
-﻿namespace UnitOfWorkWebApi.Configuration.Extensions.Services
+﻿namespace UnitOfWorkWebApi.Configuration.Middlewares
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.EntityFrameworkCore;

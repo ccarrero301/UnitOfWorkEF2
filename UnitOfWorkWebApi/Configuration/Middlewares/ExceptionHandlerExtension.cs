@@ -1,4 +1,4 @@
-﻿namespace UnitOfWorkWebApi.Configuration.Extensions.Middlewares
+﻿namespace UnitOfWorkWebApi.Configuration.Middlewares
 {
     using System;
     using System.Threading.Tasks;

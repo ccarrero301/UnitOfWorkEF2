@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Extensions.Middlewares;
+    using Middlewares;
     using InternalServices;
     
     public static class ApplicationBuilder

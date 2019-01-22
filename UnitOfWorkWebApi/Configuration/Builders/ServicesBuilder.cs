@@ -1,7 +1,7 @@
 ﻿namespace UnitOfWorkWebApi.Configuration.Builders
 {
     using Microsoft.Extensions.DependencyInjection;
-    using Extensions.Services;
+    using Middlewares;
     using InternalServices;
     
     public static class ServicesBuilder
