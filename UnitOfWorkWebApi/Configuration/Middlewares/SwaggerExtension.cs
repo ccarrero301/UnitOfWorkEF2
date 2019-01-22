@@ -28,7 +28,8 @@
                 {
                     Title = "Blogs API",
                     Version = "v1",
-                    Description = "API to manage blogs, posts and comments... Built in .NET core 2.2"
+                    Description =
+                        "API to manage blogs, posts and comments using entity framework core... Built in .NET core 2.2"
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -36,6 +37,5 @@
                 options.IncludeXmlComments(xmlPath);
             });
         }
-
     }
 }

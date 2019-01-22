@@ -26,7 +26,8 @@
 
         public void Insert(IEnumerable<TEntity> entities) => DbSet.AddRange(entities);
 
-        public Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken)) => DbSet.AddAsync(entity, cancellationToken);
+        public Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default(CancellationToken)) =>
+            DbSet.AddAsync(entity, cancellationToken);
 
         public Task InsertAsync(params TEntity[] entities) => DbSet.AddRangeAsync(entities);
 
@@ -46,10 +47,17 @@
 
         public void Delete(object id)
         {
-            // using a stub entity to mark for deletion
-            var typeInfo = typeof(TEntity).GetTypeInfo();
-            var key = DbContext.Model.FindEntityType(typeInfo.Name).FindPrimaryKey().Properties.FirstOrDefault();
-            var property = typeInfo.GetProperty(key?.Name);
+            var entityType = typeof(TEntity);
+
+            var key = DbContext
+                        .Model
+                        .FindEntityType(entityType)
+                        .FindPrimaryKey()
+                        .Properties
+                        .FirstOrDefault();
+
+            var property = entityType.GetProperty(key?.Name);
+
             if (property != null)
             {
                 var entity = Activator.CreateInstance<TEntity>();
@@ -59,10 +67,9 @@
             else
             {
                 var entity = DbSet.Find(id);
+
                 if (entity != null)
-                {
                     Delete(entity);
-                }
             }
         }
 

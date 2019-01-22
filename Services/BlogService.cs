@@ -90,5 +90,14 @@
 
             return _unitOfWork.SaveChangesAsync();
         }
+
+        public Task<int> DeleteBlogAsync(int blogId)
+        {
+            var blogRepository = _unitOfWork.GetRepository<Blog>();
+
+            blogRepository.Delete(blogId);
+
+            return _unitOfWork.SaveChangesAsync();
+        }
     }
 }

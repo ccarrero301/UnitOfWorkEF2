@@ -76,5 +76,15 @@
 
             return Ok(numberOfRecords);
         }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        [Produces(typeof(int))]
+        public async Task<IActionResult> DeleteBlog(int id)
+        {
+            var numberOfRecords = await _blogService.DeleteBlogAsync(id).ConfigureAwait(false);
+
+            return Ok(numberOfRecords);
+        }
     }
 }
