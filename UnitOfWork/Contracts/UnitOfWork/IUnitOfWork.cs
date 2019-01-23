@@ -11,9 +11,9 @@
 
         IQueryableRepository<TEntity> GetQueryableRepository<TEntity>() where TEntity : class;
 
-        int SaveChanges(bool ensureAutoHistory = false);
+        int SaveChanges();
 
-        Task<int> SaveChangesAsync(bool ensureAutoHistory = false);
+        Task<int> SaveChangesAsync();
 
         int ExecuteSqlCommand(string sql, params object[] parameters);
 

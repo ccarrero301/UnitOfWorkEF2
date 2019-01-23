@@ -15,17 +15,15 @@ namespace DataModel.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.EnableAutoHistory(null);
-
-            modelBuilder.Entity<Blog>().HasKey(t => t.Id);
-            modelBuilder.Entity<Blog>().Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Blog>().HasKey(blog => blog.Id);
+            modelBuilder.Entity<Blog>().Property(blog => blog.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Blog>()
                 .HasMany(blog => blog.Posts)
                 .WithOne(post => post.Blog)
                 .HasForeignKey(post => post.BlogId);
 
-            modelBuilder.Entity<Post>().HasKey(t => t.Id);
-            modelBuilder.Entity<Post>().Property(t => t.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Post>().HasKey(post => post.Id);
+            modelBuilder.Entity<Post>().Property(post => post.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Post>()
                 .HasMany(post => post.Comments)
                 .WithOne(comment => comment.Post)
@@ -33,6 +31,13 @@ namespace DataModel.Models
 
             modelBuilder.Entity<Comment>().HasKey(t => t.Id);
             modelBuilder.Entity<Comment>().Property(t => t.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<User>().HasKey(user => user.Id);
+            modelBuilder.Entity<User>().Property(user => user.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<User>().Property(user => user.Password)
+                .HasConversion(password => UserUtils.EncryptPassword(password),
+                    password => UserUtils.DecryptPassword(password));
+            modelBuilder.Entity<User>().Ignore(user => user.Token);
         }
     }
 }

@@ -49,11 +49,11 @@
             var entityType = typeof(TEntity);
 
             var key = DbContext
-                        .Model
-                        .FindEntityType(entityType)
-                        .FindPrimaryKey()
-                        .Properties
-                        .FirstOrDefault();
+                .Model
+                .FindEntityType(entityType)
+                .FindPrimaryKey()
+                .Properties
+                .FirstOrDefault();
 
             var property = entityType.GetProperty(key?.Name);
 

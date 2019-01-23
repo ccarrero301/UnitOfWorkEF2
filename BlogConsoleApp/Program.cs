@@ -15,6 +15,13 @@
     {
         private static async Task Main(string[] args)
         {
+            //var key = Guid.NewGuid().ToString("N");
+
+            //var encrypted = UserUtils.EncryptPassword("carlos");
+            //var decrypted = UserUtils.DecryptPassword(encrypted);
+
+            //Console.WriteLine(decrypted);
+
             Console.WriteLine("Press Key to Enter...");
             Console.ReadKey();
         }
@@ -36,7 +43,7 @@
 
                 await blogRepository.InsertAsync(GetSampleBlog()).ConfigureAwait(false);
 
-                await unitOfWork.SaveChangesAsync(true).ConfigureAwait(false);
+                await unitOfWork.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 

@@ -13,6 +13,8 @@
 
         public string UnitOfWorkConnectionString => GetValueFormConfiguration("UnitOfWork", "ConnectionString");
 
+        public string JwtGeneratorKey => GetValueFormConfiguration("Jwt", "GeneratorKey");
+
         public string TextFileLogPath => GetValueFormConfiguration("TextFileLog", "Path");
 
         private string GetValueFormConfiguration(string root, string key) => _configuration[$"{root}:{key}"];

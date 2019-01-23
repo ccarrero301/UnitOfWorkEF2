@@ -1,50 +1,45 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataModel.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AutoHistory",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RowId = table.Column<string>(maxLength: 50, nullable: false),
-                    TableName = table.Column<string>(maxLength: 128, nullable: false),
-                    Changed = table.Column<string>(nullable: true),
-                    Kind = table.Column<int>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AutoHistory", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Blogs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
                     Url = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
+                constraints: table => { table.PrimaryKey("PK_Blogs", x => x.Id); });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
                 {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
-                });
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table => { table.PrimaryKey("PK_User", x => x.Id); });
 
             migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     BlogId = table.Column<int>(nullable: false)
@@ -65,7 +60,8 @@ namespace DataModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     PostId = table.Column<int>(nullable: false)
@@ -95,10 +91,10 @@ namespace DataModel.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AutoHistory");
+                name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Posts");

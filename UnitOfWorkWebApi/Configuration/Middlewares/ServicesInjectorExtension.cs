@@ -1,6 +1,7 @@
 ﻿namespace UnitOfWorkWebApi.Configuration.Middlewares
 {
     using Microsoft.Extensions.DependencyInjection;
+    using InternalServices;
     using Services;
 
     public static class ServicesInjectorExtension
@@ -12,6 +13,8 @@
             services.AddScoped<IPostService, PostService>();
 
             services.AddScoped<ICommentService, CommentService>();
+
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

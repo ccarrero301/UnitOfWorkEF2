@@ -7,6 +7,6 @@
     {
         TContext DbContext { get; }
 
-        Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks);
+        Task<int> SaveChangesAsync(params IUnitOfWork[] unitOfWorks);
     }
 }

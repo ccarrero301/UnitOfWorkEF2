@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Middlewares;
     using InternalServices;
-    
+
     public static class ApplicationBuilder
     {
         public static void ConfigureApplication(this IApplicationBuilder applicationBuilder,

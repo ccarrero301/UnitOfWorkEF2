@@ -60,36 +60,23 @@
         public IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class =>
             DbContext.Set<TEntity>().FromSql(sql, parameters);
 
-        public int SaveChanges(bool ensureAutoHistory = false)
+        public int SaveChanges() => DbContext.SaveChanges();
+
+        public async Task<int> SaveChangesAsync()
         {
-            if (ensureAutoHistory)
-            {
-                DbContext.EnsureAutoHistory();
-            }
-
-            return DbContext.SaveChanges();
-        }
-
-        public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false)
-        {
-            if (ensureAutoHistory)
-            {
-                DbContext.EnsureAutoHistory();
-            }
-
-            if(DbContext.ChangeTracker.HasChanges())
+            if (DbContext.ChangeTracker.HasChanges())
                 return await DbContext.SaveChangesAsync().ConfigureAwait(false);
 
             return 0;
         }
 
-        public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false, params IUnitOfWork[] unitOfWorks)
+        public async Task<int> SaveChangesAsync(params IUnitOfWork[] unitOfWorks)
         {
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var count = unitOfWorks.Sum(unitOfWork => unitOfWork.SaveChangesAsync(ensureAutoHistory).Result);
+                var count = unitOfWorks.Sum(unitOfWork => unitOfWork.SaveChangesAsync().Result);
 
-                count += await SaveChangesAsync(ensureAutoHistory).ConfigureAwait(false);
+                count += await SaveChangesAsync().ConfigureAwait(false);
 
                 transactionScope.Complete();
 

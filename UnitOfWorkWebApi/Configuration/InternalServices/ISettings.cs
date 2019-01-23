@@ -4,6 +4,8 @@
     {
         string UnitOfWorkConnectionString { get; }
 
+        string JwtGeneratorKey { get; }
+
         string TextFileLogPath { get; }
     }
 }

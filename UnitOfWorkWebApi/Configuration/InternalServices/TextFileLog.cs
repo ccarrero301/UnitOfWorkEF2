@@ -2,7 +2,7 @@
 {
     using System;
     using Serilog;
-    
+
     public class TextFileLog : ILog
     {
         public TextFileLog(ISettings settings) => Log.Logger = new LoggerConfiguration()

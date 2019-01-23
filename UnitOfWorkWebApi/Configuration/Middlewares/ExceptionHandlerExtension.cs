@@ -7,7 +7,7 @@
     using InternalServices;
     using GlobalExceptionHandler.WebApi;
     using Newtonsoft.Json;
-    
+
     public static class ExceptionHandlerExtension
     {
         public static void UseCustomExceptionHandlerBuilder(this IApplicationBuilder applicationBuilder, ILog log)
