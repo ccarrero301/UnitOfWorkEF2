@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace UnitOfWorkWebApi.Configuration.InternalServices
+﻿namespace UnitOfWorkWebApi.Configuration.InternalServices
 {
     using System;
     using System.IdentityModel.Tokens.Jwt;
@@ -44,23 +42,21 @@ namespace UnitOfWorkWebApi.Configuration.InternalServices
                 );
         }
 
-        public async Task<User> GetUserAsync(string username, string password)
+        public Task<User> GetUserAsync(string username, string password)
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            var possibleValidUser = await queryableUserRepository
+            return queryableUserRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: user => user.Username == username,
+                    predicate: user => user.Username == username && user.Password == password,
                     orderBy: null,
                     include: null
                 );
-
-            return possibleValidUser.Password == password ? possibleValidUser : null;
         }
 
         public async Task<User> AuthenticateUserAsync(string username, string password)
         {
-            var user = await GetUserAsync(username, password);
+            var user = await GetUserAsync(username, password).ConfigureAwait(false);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.JwtGeneratorKey);
@@ -73,6 +69,10 @@ namespace UnitOfWorkWebApi.Configuration.InternalServices
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(1),
+
+                Issuer = "internal",
+
+                Audience = "internal",
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)

@@ -9,3 +9,6 @@ INNER JOIN	Posts post
 ON			comm.PostId = post.Id
 
 WHERE		post.BlogId = 9
+
+SELECT		*
+FROM		Users

@@ -8,6 +8,8 @@
     {
         public static void ConfigureServices(this IServiceCollection services, ISettings settings)
         {
+            services.ConfigureAuthentication(settings);
+
             services.InjectUnitOfWork(settings);
 
             services.InjectServices();

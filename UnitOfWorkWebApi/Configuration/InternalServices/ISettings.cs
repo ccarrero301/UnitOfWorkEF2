@@ -6,6 +6,10 @@
 
         string JwtGeneratorKey { get; }
 
+        string JwtIssuer { get; }
+
+        string JwtAudience { get; }
+
         string TextFileLogPath { get; }
     }
 }

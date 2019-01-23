@@ -11,6 +11,8 @@
         {
             applicationBuilder.UseHttpsRedirection();
 
+            applicationBuilder.UseAuthentication();
+
             applicationBuilder.UseHsts();
         }
     }

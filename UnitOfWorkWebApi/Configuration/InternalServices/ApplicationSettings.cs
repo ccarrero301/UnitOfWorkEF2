@@ -15,6 +15,10 @@
 
         public string JwtGeneratorKey => GetValueFormConfiguration("Jwt", "GeneratorKey");
 
+        public string JwtIssuer => GetValueFormConfiguration("Jwt", "Issuer");
+
+        public string JwtAudience => GetValueFormConfiguration("Jwt", "Audience");
+
         public string TextFileLogPath => GetValueFormConfiguration("TextFileLog", "Path");
 
         private string GetValueFormConfiguration(string root, string key) => _configuration[$"{root}:{key}"];

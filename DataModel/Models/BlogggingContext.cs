@@ -7,11 +7,16 @@ namespace DataModel.Models
         public BloggingContext(DbContextOptions options)
             : base(options)
         {
+            
         }
 
         public DbSet<Blog> Blogs { get; set; }
+
         public DbSet<Post> Posts { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +26,7 @@ namespace DataModel.Models
                 .HasMany(blog => blog.Posts)
                 .WithOne(post => post.Blog)
                 .HasForeignKey(post => post.BlogId);
-
+            
             modelBuilder.Entity<Post>().HasKey(post => post.Id);
             modelBuilder.Entity<Post>().Property(post => post.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Post>()
@@ -36,7 +41,7 @@ namespace DataModel.Models
             modelBuilder.Entity<User>().Property(user => user.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<User>().Property(user => user.Password)
                 .HasConversion(password => UserUtils.EncryptPassword(password),
-                    password => UserUtils.DecryptPassword(password));
+                    password => password);
             modelBuilder.Entity<User>().Ignore(user => user.Token);
         }
     }
