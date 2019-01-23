@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Mvc.Versioning;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
+    using Filters;
     using Newtonsoft.Json;
 
     public static class MvcExtension
@@ -17,7 +18,7 @@
 
         private static void AddMvc(IServiceCollection services) =>
             services
-                .AddMvc()
+                .AddMvc(options => options.Filters.Add(new ValidateModelActionFilter()))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
