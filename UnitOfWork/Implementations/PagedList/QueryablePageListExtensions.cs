@@ -1,14 +1,15 @@
-﻿namespace UnitOfWork.Contracts.PagedList
+﻿namespace UnitOfWork.Implementations.PagedList
 {
     using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using Contracts.PagedList;
 
-    public static class QueryablePageListExtensions
+    internal static class QueryablePageListExtensions
     {
-        public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
+        internal static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageIndex,
             int pageSize, int indexFrom = 0, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (indexFrom > pageIndex)

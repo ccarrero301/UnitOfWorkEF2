@@ -1,9 +1,10 @@
-﻿namespace UnitOfWork.Contracts.PagedList
+﻿namespace UnitOfWork.Implementations.PagedList
 {
     using System;
     using System.Collections.Generic;
-
-    public static class EnumerablePagedListExtensions
+    using UnitOfWork.Contracts.PagedList;
+    
+    internal static class EnumerablePagedListExtensions
     {
         public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> source, int pageIndex, int pageSize,
             int indexFrom = 0) => new PagedList<T>(source, pageIndex, pageSize, indexFrom);

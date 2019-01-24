@@ -9,6 +9,8 @@
     using Microsoft.EntityFrameworkCore.Query;
     using Contracts.PagedList;
     using Contracts.Repository;
+    using PagedList;
+
 
     internal class QueryableRepository<TEntity> : IQueryableRepository<TEntity> where TEntity : class
     {

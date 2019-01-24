@@ -1,10 +1,11 @@
-﻿namespace UnitOfWork.Contracts.PagedList
+﻿namespace UnitOfWork.Implementations.PagedList
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-
-    public class PagedList<T> : IPagedList<T>
+    using System.Collections.Generic;
+    using UnitOfWork.Contracts.PagedList;
+    
+    internal class PagedList<T> : IPagedList<T>
     {
         public int PageIndex { get; set; }
 
