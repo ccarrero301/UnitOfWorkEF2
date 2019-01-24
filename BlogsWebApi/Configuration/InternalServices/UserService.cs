@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
+    using Services.Specifications;
     using DataModel.Models;
 
     public class UserService : IUserService
@@ -32,10 +33,11 @@
         public Task<User> GetUserAsync(string username)
         {
             var userQueryableRepository = _unitOfWork.GetQueryableRepository<User>();
+            var userByNameSpecification = new UserByNameSpecification(username);
 
             return userQueryableRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: user => user.Username == username,
+                    predicate: userByNameSpecification,
                     orderBy: null,
                     include: null
                 );
@@ -45,9 +47,13 @@
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
+            var userByNameSpecification = new UserByNameSpecification(username);
+            var userByPasswordSpecification = new UserByPasswordSpecification(password);
+            var userCredentialsSpecification = userByNameSpecification & userByPasswordSpecification;
+
             return queryableUserRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: user => user.Username == username && user.Password == password,
+                    predicate: userCredentialsSpecification,
                     orderBy: null,
                     include: null
                 );

@@ -6,6 +6,7 @@
     using DataModel.Models;
     using Microsoft.EntityFrameworkCore;
     using UnitOfWork.Contracts.UnitOfWork;
+    using Specifications;
 
     public class BlogService : IBlogService
     {
@@ -36,11 +37,12 @@
         public Task<string> GetBlogTitleAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var blogByIdSpecification = new BlogByIdSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     selector: blog => blog.Title,
-                    predicate: blog => blog.Id == blogId,
+                    predicate: blogByIdSpecification,
                     orderBy: null,
                     include: t => t.Include(blog => blog.Title)
                 );
@@ -49,10 +51,11 @@
         public Task<Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var blogByIdSpecification = new BlogByIdSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
+                    predicate: blogByIdSpecification,
                     orderBy: null,
                     include: null
                 );
@@ -61,10 +64,11 @@
         public Task<Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var blogByIdSpecification = new BlogByIdSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
+                    predicate: blogByIdSpecification,
                     orderBy: null,
                     include: t => t.Include(blog => blog.Posts)
                 );
@@ -73,10 +77,11 @@
         public Task<Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var blogByIdSpecification = new BlogByIdSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
+                    predicate: blogByIdSpecification,
                     orderBy: null,
                     include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
                 );

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "DataModel\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{B1E9E23A-DACE-4028-85D5-9C713EC2790A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "Patterns\Patterns.csproj", "{B4C9C1D0-B5C7-4BD1-BEEA-91EE7836C0F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B1E9E23A-DACE-4028-85D5-9C713EC2790A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E9E23A-DACE-4028-85D5-9C713EC2790A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E9E23A-DACE-4028-85D5-9C713EC2790A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4C9C1D0-B5C7-4BD1-BEEA-91EE7836C0F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C9C1D0-B5C7-4BD1-BEEA-91EE7836C0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C9C1D0-B5C7-4BD1-BEEA-91EE7836C0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C9C1D0-B5C7-4BD1-BEEA-91EE7836C0F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,6 @@
-﻿namespace UnitOfWork.Implementations
+﻿using Patterns.Specification.Base;
+
+namespace UnitOfWork.Implementations
 {
     using System;
     using System.Linq;
@@ -7,10 +9,11 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Query;
+    using Patterns.Specification.Contracts;
     using Contracts.PagedList;
     using Contracts.Repository;
     using PagedList;
-
+    
     internal class QueryableRepository<TEntity> : IQueryableRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext DbContext;
@@ -22,7 +25,7 @@
             DbSet = DbContext.Set<TEntity>();
         }
 
-        public IPagedList<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
+        public IPagedList<TEntity> GetPagedList(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
@@ -34,7 +37,7 @@
             return orderBy?.Invoke(query).ToPagedList(pageIndex, pageSize) ?? query.ToPagedList(pageIndex, pageSize);
         }
 
-        public Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null,
+        public Task<IPagedList<TEntity>> GetPagedListAsync(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
@@ -49,7 +52,7 @@
         }
 
         public IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
-            Expression<Func<TEntity, bool>> predicate = null,
+            ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
@@ -64,7 +67,7 @@
         }
 
         public Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            Expression<Func<TEntity, bool>> predicate = null,
+            ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
@@ -80,7 +83,7 @@
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
 
-        public Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
+        public Task<TEntity> GetFirstOrDefaultAsync(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
@@ -91,7 +94,7 @@
         }
 
         public Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            Expression<Func<TEntity, bool>> predicate = null,
+            ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
@@ -117,7 +120,7 @@
 
         private IQueryable<TEntity> GetQuery(bool disableTracking,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include,
-            Expression<Func<TEntity, bool>> predicate = null)
+            ISpecification<TEntity> predicate = null)
         {
             IQueryable<TEntity> query = DbSet;
 
@@ -128,7 +131,7 @@
                 query = include(query);
 
             if (predicate != null)
-                query = query.Where(predicate);
+                query = query.Where(t => predicate.IsSatisfiedBy(t));
 
             return query;
         }
