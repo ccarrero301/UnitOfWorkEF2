@@ -10,6 +10,8 @@
 
         string JwtAudience { get; }
 
+        string B2BSecret { get; }
+
         string TextFileLogPath { get; }
     }
 }

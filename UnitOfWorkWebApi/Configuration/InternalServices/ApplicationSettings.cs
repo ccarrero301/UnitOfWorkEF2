@@ -18,6 +18,7 @@
         public string JwtIssuer => GetValueFormConfiguration("Jwt", "Issuer");
 
         public string JwtAudience => GetValueFormConfiguration("Jwt", "Audience");
+        public string B2BSecret => GetValueFormConfiguration("B2B", "Secret");
 
         public string TextFileLogPath => GetValueFormConfiguration("TextFileLog", "Path");
 

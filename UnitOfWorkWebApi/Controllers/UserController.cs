@@ -17,6 +17,7 @@
             _userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("Add")]
         [Produces(typeof(int))]

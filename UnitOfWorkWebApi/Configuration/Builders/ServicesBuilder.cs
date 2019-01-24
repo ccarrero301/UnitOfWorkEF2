@@ -10,6 +10,8 @@
         {
             services.ConfigureAuthentication(settings);
 
+            services.ConfigureAuthorization(settings);
+
             services.InjectUnitOfWork(settings);
 
             services.InjectServices();
