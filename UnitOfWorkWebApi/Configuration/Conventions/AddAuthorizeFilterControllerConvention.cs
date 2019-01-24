@@ -5,7 +5,9 @@
 
     public class AddAuthorizeFilterControllerConvention : IControllerModelConvention
     {
-        public void Apply(ControllerModel controller) =>
-            controller.Filters.Add(new AuthorizeFilter("AuthenticatedUser"));
+        public void Apply(ControllerModel controller)
+        {
+            controller.Filters.Add(new AuthorizeFilter("ViewerOrAdmin"));
+        }
     }
 }

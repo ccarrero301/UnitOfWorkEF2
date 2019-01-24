@@ -31,7 +31,18 @@
             services.AddAuthorization(
                 options =>
                 {
-                    options.AddPolicy("AuthenticatedUser", policy => { policy.RequireAuthenticatedUser(); });
+                    options.AddPolicy("ViewerOrAdmin",
+                        policy =>
+                        {
+                            policy.RequireAssertion(assertion =>
+                                assertion.User.IsInRole("admin") || assertion.User.IsInRole("viewer"));
+                        });
+
+                    options.AddPolicy("Viewer",
+                        policy => { policy.RequireRole("viewer"); });
+
+                    options.AddPolicy("Admin",
+                        policy => { policy.RequireRole("admin"); });
 
                     options.AddPolicy("B2B",
                         policy => { policy.Requirements.Add(new B2BRequirement($"Bearer {settings.B2BSecret}")); });
