@@ -14,7 +14,6 @@
         private readonly ISettings _settings;
         private readonly IUnitOfWork<BloggingContext> _unitOfWork;
 
-
         public UserService(ISettings settings, IUnitOfWork<BloggingContext> unitOfWork)
         {
             _settings = settings;
@@ -54,37 +53,36 @@
                 );
         }
 
-        public async Task<User> AuthenticateUserAsync(string username, string password)
+        public async Task<User> AuthenticateUserAsync(User user)
         {
-            var user = await GetUserAsync(username, password).ConfigureAwait(false);
+            var authenticatedUser = await GetUserAsync(user.Username, user.Password).ConfigureAwait(false);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.JwtGeneratorKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, authenticatedUser.Id.ToString()),
+                    new Claim(ClaimTypes.Role, authenticatedUser.Role)
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(1),
 
-                Issuer = "internal",
-
-                Audience = "internal",
+                Issuer = "blogs.api",
+                Audience = "blogs.api",
 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            authenticatedUser.Token = tokenHandler.WriteToken(token);
 
-            // remove password before returning
-            user.Password = null;
+            authenticatedUser.Password = null;
 
-            return user;
+            return authenticatedUser;
         }
     }
 }

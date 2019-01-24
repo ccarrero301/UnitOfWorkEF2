@@ -11,6 +11,6 @@
 
         Task<User> GetUserAsync(string username, string password);
 
-        Task<User> AuthenticateUserAsync(string username, string password);
+        Task<User> AuthenticateUserAsync(User user);
     }
 }
