@@ -7,11 +7,9 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Query;
-    using Patterns.Specification.Contracts;
     using Contracts.PagedList;
     using Contracts.Repository;
     using PagedList;
-
 
     internal class QueryableRepository<TEntity> : IQueryableRepository<TEntity> where TEntity : class
     {
@@ -24,75 +22,81 @@
             DbSet = DbContext.Set<TEntity>();
         }
 
-        public IPagedList<TEntity> GetPagedList(ISpecification<TEntity> predicate = null,
+        public IPagedList<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true)
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).ToPagedList(pageIndex, pageSize) ?? query.ToPagedList(pageIndex, pageSize);
         }
 
-        public Task<IPagedList<TEntity>> GetPagedListAsync(ISpecification<TEntity> predicate = null,
+        public Task<IPagedList<TEntity>> GetPagedListAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken) ??
                    query.ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
 
         public IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
-            ISpecification<TEntity> predicate = null,
+            Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true)
             where TResult : class
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).Select(selector).ToPagedList(pageIndex, pageSize) ??
                    query.Select(selector).ToPagedList(pageIndex, pageSize);
         }
 
         public Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            ISpecification<TEntity> predicate = null,
+            Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken))
             where TResult : class
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).Select(selector)
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken) ?? query.Select(selector)
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
 
-        public Task<TEntity> GetFirstOrDefaultAsync(ISpecification<TEntity> predicate = null,
+        public Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy?.Invoke(query).FirstOrDefaultAsync() ?? query.FirstOrDefaultAsync();
         }
 
         public Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            ISpecification<TEntity> predicate = null,
+            Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true)
         {
-            var query = GetQuery(disableTracking, predicate);
+            var query = GetQuery(disableTracking, include, predicate);
 
             return orderBy != null
                 ? orderBy(query).Select(selector).FirstOrDefaultAsync()
@@ -111,20 +115,20 @@
         public int Count(Expression<Func<TEntity, bool>> predicate = null) =>
             predicate == null ? DbSet.Count() : DbSet.Count(predicate);
 
-        private IQueryable<TEntity> GetQuery(bool disableTracking, ISpecification<TEntity> predicate = null)
+        private IQueryable<TEntity> GetQuery(bool disableTracking,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include,
+            Expression<Func<TEntity, bool>> predicate = null)
         {
             IQueryable<TEntity> query = DbSet;
 
             if (disableTracking)
                 query = query.AsNoTracking();
 
-            var include = predicate?.ToInclude<IIncludableQueryable<TEntity, object>>();
-
             if (include != null)
                 query = include(query);
 
             if (predicate != null)
-                query = query.Where(t => predicate.IsSatisfiedBy(t));
+                query = query.Where(predicate);
 
             return query;
         }
