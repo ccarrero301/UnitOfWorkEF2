@@ -3,8 +3,8 @@
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Configuration.InternalServices;
     using DataModel.Models;
+    using Services.Users;
 
     [Authorize(Policy = "Admin")]
     [Route("api/[controller]")]

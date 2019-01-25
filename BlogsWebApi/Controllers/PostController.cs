@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
     using DataModel.Models;
     using Microsoft.AspNetCore.Mvc;
-    using Services;
+    using Services.Posts;
 
     [Route("api/[controller]")]
     [ApiController]

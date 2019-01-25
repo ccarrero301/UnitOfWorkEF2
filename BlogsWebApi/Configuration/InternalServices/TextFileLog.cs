@@ -2,6 +2,7 @@
 {
     using System;
     using Serilog;
+    using Patterns.Settings;
 
     public class TextFileLog : ILog
     {

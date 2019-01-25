@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.Blogs
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

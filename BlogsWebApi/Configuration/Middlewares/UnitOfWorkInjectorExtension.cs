@@ -3,7 +3,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.EntityFrameworkCore;
     using UnitOfWork.Implementations;
-    using InternalServices;
+    using Patterns.Settings;
     using DataModel.Models;
 
     public static class UnitOfWorkInjectorExtension

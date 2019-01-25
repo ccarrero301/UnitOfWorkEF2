@@ -4,8 +4,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Requirements;
-    using InternalServices;
-    using Services;
+    using Services.Blogs;
+    using Services.Users;
+    using Services.Posts;
+    using Services.Comments;
 
     public static class ServicesInjectorExtension
     {

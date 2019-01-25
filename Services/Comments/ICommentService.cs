@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.Comments
 {
     using System.Threading.Tasks;
     using DataModel.Models;

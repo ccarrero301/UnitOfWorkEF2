@@ -1,12 +1,10 @@
-﻿namespace Services
+﻿namespace Services.Blogs
 {
-    using System.Linq;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using DataModel.Models;
-    using Microsoft.EntityFrameworkCore;
     using UnitOfWork.Contracts.UnitOfWork;
-
+    using DataModel.Models;
+    
     public class BlogService : IBlogService
     {
         private readonly IUnitOfWork<BloggingContext> _unitOfWork;
@@ -23,9 +21,7 @@
             var blogsPagedList = await queryableBlogRepository
                 .GetPagedListAsync(
                     selector: blog => blog,
-                    predicate: null,
-                    orderBy: order => order.OrderBy(blog => blog.Id),
-                    include: include => include.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
+                    specification: new AllBlogsSpecification(),
                     pageIndex: 0,
                     pageSize: 20
                 ).ConfigureAwait(false);
@@ -40,9 +36,7 @@
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     selector: blog => blog.Title,
-                    predicate: blog => blog.Id == blogId,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Title)
+                    specification: new BlogTitleSpecification(blogId)
                 );
         }
 
@@ -52,9 +46,7 @@
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
-                    orderBy: null,
-                    include: null
+                    specification: new BlogSpecification(blogId)
                 );
         }
 
@@ -64,9 +56,7 @@
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Posts)
+                    specification: new BlogWithPostsSpecification(blogId)
                 );
         }
 
@@ -76,9 +66,7 @@
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blog => blog.Id == blogId,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
+                    specification: new BlogWithPostsAndCommentsSpecification(blogId)
                 );
         }
 

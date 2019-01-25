@@ -5,7 +5,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Requirements;
-    using InternalServices;
+    using Patterns.Settings;
 
     public static class AuthenticationAndAuthorizationExtension
     {

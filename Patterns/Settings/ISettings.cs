@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.InternalServices
+﻿namespace Patterns.Settings
 {
     public interface ISettings
     {

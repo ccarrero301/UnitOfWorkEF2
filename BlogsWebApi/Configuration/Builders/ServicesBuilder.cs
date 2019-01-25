@@ -2,8 +2,8 @@
 {
     using Microsoft.Extensions.DependencyInjection;
     using Middlewares;
-    using InternalServices;
-
+    using Patterns.Settings;
+    
     public static class ServicesBuilder
     {
         public static void ConfigureServices(this IServiceCollection services, ISettings settings)

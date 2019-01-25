@@ -9,4 +9,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Patterns\Patterns.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LinqBuilder">
+      <HintPath>C:\Users\Usuario\.nuget\packages\linqbuilder\0.15.0\lib\netstandard1.3\LinqBuilder.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

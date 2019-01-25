@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.Posts
 {
     using System.Threading.Tasks;
     using UnitOfWork.Contracts.UnitOfWork;

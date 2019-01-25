@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using DataModel.Models;
-    using Services;
+    using Services.Blogs;
 
     [Route("api/[controller]")]
     [ApiController]

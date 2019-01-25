@@ -7,7 +7,8 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Configuration.InternalServices;
-
+    using Patterns.Settings;
+    
     public class Program
     {
         public static void Main(string[] args) => CreateWebHostBuilder(args).Build().Run();

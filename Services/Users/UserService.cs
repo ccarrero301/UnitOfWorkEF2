@@ -1,14 +1,15 @@
-﻿namespace BlogsWebApi.Configuration.InternalServices
+﻿namespace Services.Users
 {
     using System;
+    using System.Text;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
-    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
+    using Patterns.Settings;
     using DataModel.Models;
-
+    
     public class UserService : IUserService
     {
         private readonly ISettings _settings;
@@ -35,9 +36,7 @@
 
             return userQueryableRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: user => user.Username == username,
-                    orderBy: null,
-                    include: null
+                    specification: new UserByNameSpecification(username)
                 );
         }
 
@@ -47,9 +46,7 @@
 
             return queryableUserRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: user => user.Username == username && user.Password == password,
-                    orderBy: null,
-                    include: null
+                    specification: new UserByCredentialsSpecification(username, password)
                 );
         }
 

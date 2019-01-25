@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.InternalServices
+﻿namespace Services.Users
 {
     using System.Threading.Tasks;
     using DataModel.Models;

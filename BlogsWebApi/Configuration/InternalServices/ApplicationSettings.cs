@@ -1,7 +1,8 @@
 ﻿namespace BlogsWebApi.Configuration.InternalServices
 {
     using Microsoft.Extensions.Configuration;
-
+    using Patterns.Settings;
+    
     public class ApplicationSettings : ISettings
     {
         private readonly IConfiguration _configuration;
