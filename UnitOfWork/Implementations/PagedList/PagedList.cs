@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using UnitOfWork.Contracts.PagedList;
-    
+
     internal class PagedList<T> : IPagedList<T>
     {
         public int PageIndex { get; set; }

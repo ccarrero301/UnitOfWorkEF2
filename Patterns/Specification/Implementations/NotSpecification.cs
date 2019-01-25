@@ -1,5 +1,7 @@
 ﻿namespace Patterns.Specification.Implementations
 {
+    using System;
+    using System.Linq;
     using Base;
     using Contracts;
 
@@ -10,5 +12,7 @@
         public NotSpecification(ISpecification<TEntity> specification) => _specification = specification;
 
         public override bool IsSatisfiedBy(TEntity entityToTest) => !_specification.IsSatisfiedBy(entityToTest);
+
+        public override Func<IQueryable<TEntity>, TResult> ToInclude<TResult>() => _specification.ToInclude<TResult>();
     }
 }

@@ -1,18 +1,15 @@
-﻿namespace Services.Specifications
+﻿namespace DataModel.Specifications
 {
     using System;
     using System.Linq.Expressions;
     using Patterns.Specification.Base;
-    using DataModel.Models;
+    using Models;
 
-    public class UserByNameSpecification : ExpressionSpecification<User>
+    public class UserByUserNameSpecification : ExpressionSpecification<User>
     {
         private readonly string _userName;
 
-        public UserByNameSpecification(string _userName)
-        {
-            this._userName = _userName;
-        }
+        public UserByUserNameSpecification(string userName) => this._userName = userName;
 
         public override Expression<Func<User, bool>> ToExpression() => user => user.Username == _userName;
     }

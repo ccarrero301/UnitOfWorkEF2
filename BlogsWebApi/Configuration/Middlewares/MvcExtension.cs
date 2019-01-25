@@ -35,7 +35,7 @@
                 options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
 
-        public static void UseMvcBuilder(this IApplicationBuilder applicationBuilder) => 
+        public static void UseMvcBuilder(this IApplicationBuilder applicationBuilder) =>
             applicationBuilder.UseMvc();
     }
 }

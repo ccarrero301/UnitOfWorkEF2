@@ -7,7 +7,6 @@ namespace DataModel.Models
         public BloggingContext(DbContextOptions options)
             : base(options)
         {
-            
         }
 
         public DbSet<Blog> Blogs { get; set; }
@@ -26,7 +25,7 @@ namespace DataModel.Models
                 .HasMany(blog => blog.Posts)
                 .WithOne(post => post.Blog)
                 .HasForeignKey(post => post.BlogId);
-            
+
             modelBuilder.Entity<Post>().HasKey(post => post.Id);
             modelBuilder.Entity<Post>().Property(post => post.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Post>()

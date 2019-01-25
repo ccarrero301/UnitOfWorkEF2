@@ -5,8 +5,6 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore.Query;
-    using Patterns.Specification.Base;
     using Patterns.Specification.Contracts;
     using PagedList;
 
@@ -14,14 +12,12 @@
     {
         IPagedList<TEntity> GetPagedList(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true);
 
         Task<IPagedList<TEntity>> GetPagedListAsync(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
@@ -30,7 +26,6 @@
         IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
             ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true) where TResult : class;
@@ -38,7 +33,6 @@
         Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
@@ -46,13 +40,11 @@
 
         Task<TEntity> GetFirstOrDefaultAsync(ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true);
 
         Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
             ISpecification<TEntity> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
             bool disableTracking = true);
 
         IQueryable<TEntity> FromSql(string sql, params object[] parameters);

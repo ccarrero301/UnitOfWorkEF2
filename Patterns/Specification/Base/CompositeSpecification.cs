@@ -1,11 +1,15 @@
 ﻿namespace Patterns.Specification.Base
 {
+    using System;
+    using System.Linq;
     using Contracts;
     using Implementations;
 
     public abstract class CompositeSpecification<TEntity> : ISpecification<TEntity>
     {
         public abstract bool IsSatisfiedBy(TEntity entityToTest);
+
+        public virtual Func<IQueryable<TEntity>, TResult> ToInclude<TResult>() => null;
 
         public ISpecification<TEntity> And(ISpecification<TEntity> specification) =>
             new AndSpecification<TEntity>(this, specification);

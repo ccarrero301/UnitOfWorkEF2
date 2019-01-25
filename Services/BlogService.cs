@@ -3,10 +3,9 @@
     using System.Linq;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using DataModel.Models;
-    using Microsoft.EntityFrameworkCore;
     using UnitOfWork.Contracts.UnitOfWork;
-    using Specifications;
+    using DataModel.Specifications;
+    using DataModel.Models;
 
     public class BlogService : IBlogService
     {
@@ -20,13 +19,13 @@
         public async Task<IEnumerable<Blog>> GetAllBlogsAsync()
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
+            var allBlogsWithPostsSpecification = new AllBlogsWithPostsSpecification();
 
             var blogsPagedList = await queryableBlogRepository
                 .GetPagedListAsync(
                     selector: blog => blog,
-                    predicate: null,
+                    predicate: allBlogsWithPostsSpecification,
                     orderBy: order => order.OrderBy(blog => blog.Id),
-                    include: include => include.Include(blog => blog.Posts).ThenInclude(post => post.Comments),
                     pageIndex: 0,
                     pageSize: 20
                 ).ConfigureAwait(false);
@@ -37,53 +36,49 @@
         public Task<string> GetBlogTitleAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
-            var blogByIdSpecification = new BlogByIdSpecification(blogId);
+            var blogTitleSpecification = new BlogTitleSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
                     selector: blog => blog.Title,
-                    predicate: blogByIdSpecification,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Title)
+                    predicate: blogTitleSpecification,
+                    orderBy: null
                 );
         }
 
         public Task<Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
-            var blogByIdSpecification = new BlogByIdSpecification(blogId);
+            var blogNotPostAndCommentsSpecification = new BlogSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blogByIdSpecification,
-                    orderBy: null,
-                    include: null
+                    predicate: blogNotPostAndCommentsSpecification,
+                    orderBy: null
                 );
         }
 
         public Task<Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
-            var blogByIdSpecification = new BlogByIdSpecification(blogId);
+            var blogPostsAndNoCommentsSpecification = new BlogPostsAndNoCommentsSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blogByIdSpecification,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Posts)
+                    predicate: blogPostsAndNoCommentsSpecification,
+                    orderBy: null
                 );
         }
 
         public Task<Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
-            var blogByIdSpecification = new BlogByIdSpecification(blogId);
+            var blogPostsAndCommentsSpecification = new BlogPostsAndCommentsSpecification(blogId);
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    predicate: blogByIdSpecification,
-                    orderBy: null,
-                    include: t => t.Include(blog => blog.Posts).ThenInclude(post => post.Comments)
+                    predicate: blogPostsAndCommentsSpecification,
+                    orderBy: null
                 );
         }
 
