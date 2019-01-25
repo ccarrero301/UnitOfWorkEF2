@@ -12,6 +12,7 @@
     using Contracts.Repository;
     using PagedList;
 
+
     internal class QueryableRepository<TEntity> : IQueryableRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext DbContext;
