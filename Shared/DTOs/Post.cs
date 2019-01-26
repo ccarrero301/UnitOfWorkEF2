@@ -13,7 +13,5 @@
         public IEnumerable<Comment> Comments { get; set; }
 
         public int BlogId { get; set; }
-
-        public Blog Blog { get; set; }
     }
 }

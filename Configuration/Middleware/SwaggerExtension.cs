@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using System;
     using System.IO;
@@ -7,9 +7,9 @@
     using Microsoft.Extensions.DependencyInjection;
     using Swashbuckle.AspNetCore.Swagger;
 
-    public static class SwaggerExtension
+    internal static class SwaggerExtension
     {
-        public static void UseSwaggerBuilder(this IApplicationBuilder applicationBuilder)
+        internal static void UseSwaggerBuilder(this IApplicationBuilder applicationBuilder)
         {
             applicationBuilder.UseSwagger();
 
@@ -20,7 +20,7 @@
             });
         }
 
-        public static void ConfigureSwagger(this IServiceCollection services)
+        internal static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {

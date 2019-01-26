@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using System.Text;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,9 +7,9 @@
     using Requirements;
     using Patterns.Settings;
 
-    public static class AuthenticationAndAuthorizationExtension
+    internal static class AuthenticationAndAuthorizationExtension
     {
-        public static void ConfigureAuthentication(this IServiceCollection services, ISettings settings)
+        internal static void ConfigureAuthentication(this IServiceCollection services, ISettings settings)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -26,7 +26,7 @@
                 });
         }
 
-        public static void ConfigureAuthorization(this IServiceCollection services, ISettings settings)
+        internal static void ConfigureAuthorization(this IServiceCollection services, ISettings settings)
         {
             services.AddAuthorization(
                 options =>

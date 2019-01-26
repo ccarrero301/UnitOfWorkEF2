@@ -1,12 +1,12 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using InternalServices;
 
-    public static class SecurityExtension
+    internal static class SecurityExtension
     {
-        public static void UseSecurityBuilder(this IApplicationBuilder applicationBuilder,
+        internal static void UseSecurityBuilder(this IApplicationBuilder applicationBuilder,
             IHostingEnvironment environment, ILog log)
         {
             applicationBuilder.UseHttpsRedirection();

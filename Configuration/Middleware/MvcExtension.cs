@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Mvc.Versioning;
@@ -8,9 +8,9 @@
     using Conventions;
     using Newtonsoft.Json;
 
-    public static class MvcExtension
+    internal static class MvcExtension
     {
-        public static void ConfigureMvc(this IServiceCollection services)
+        internal static void ConfigureMvc(this IServiceCollection services)
         {
             AddMvc(services);
 
@@ -35,7 +35,7 @@
                 options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
 
-        public static void UseMvcBuilder(this IApplicationBuilder applicationBuilder) =>
+        internal static void UseMvcBuilder(this IApplicationBuilder applicationBuilder) =>
             applicationBuilder.UseMvc();
     }
 }

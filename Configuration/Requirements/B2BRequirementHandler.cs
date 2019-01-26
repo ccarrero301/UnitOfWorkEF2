@@ -1,11 +1,11 @@
-﻿namespace BlogsWebApi.Configuration.Requirements
+﻿namespace Configuration.Requirements
 {
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
 
-    public class B2BRequirementHandler : AuthorizationHandler<B2BRequirement>
+    internal class B2BRequirementHandler : AuthorizationHandler<B2BRequirement>
     {
         private readonly IHttpContextAccessor _contextAccessor;
 

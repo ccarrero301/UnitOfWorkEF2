@@ -1,9 +1,9 @@
-﻿namespace BlogsWebApi.Configuration.Filters
+﻿namespace Configuration.Filters
 {
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc;
 
-    public class ValidateModelActionFilter : ActionFilterAttribute
+    internal class ValidateModelActionFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

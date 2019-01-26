@@ -1,12 +1,12 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using Microsoft.Extensions.DependencyInjection;
     using AutoMapper;
     using Mappings;
 
-    public static class AutoMapperExtension
+    internal static class AutoMapperExtension
     {
-        public static void ConfigureAutoMapper(this IServiceCollection services)
+        internal static void ConfigureAutoMapper(this IServiceCollection services)
         {
             var mappingConfig = new MapperConfiguration(configure =>
             {

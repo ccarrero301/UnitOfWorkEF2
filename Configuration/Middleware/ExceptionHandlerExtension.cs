@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using System;
     using System.Threading.Tasks;
@@ -8,9 +8,9 @@
     using GlobalExceptionHandler.WebApi;
     using Newtonsoft.Json;
 
-    public static class ExceptionHandlerExtension
+    internal static class ExceptionHandlerExtension
     {
-        public static void UseCustomExceptionHandlerBuilder(this IApplicationBuilder applicationBuilder, ILog log)
+        internal static void UseCustomExceptionHandlerBuilder(this IApplicationBuilder applicationBuilder, ILog log)
         {
             HandleGeneralExceptionErrors(applicationBuilder, log);
         }

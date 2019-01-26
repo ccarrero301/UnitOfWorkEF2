@@ -2,23 +2,29 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Data.Blogs.Contracts;
+    using DataBlogs = Data.Blogs.Contracts;
     using Shared.DTOs;
+    using Contracts;
+    using AutoMapper;
     
-    public class BlogService
+    public class BlogService : IBlogService
     {
-        private readonly IBlogService _blogDataService;
+        private readonly IMapper _mapper;
+        private readonly DataBlogs.IBlogService _blogService;
 
-        public BlogService(IBlogService blogDataService)
+        public BlogService(IMapper mapper, DataBlogs.IBlogService blogService)
         {
-            _blogDataService = blogDataService;
+            _mapper = mapper;
+            _blogService = blogService;
         }
 
-        //public async Task<IEnumerable<Blog>> GetAllBlogs()
-        //{
-        //    var dataBlogs = await _blogDataService.GetAllBlogsAsync().ConfigureAwait(false);
+        public async Task<IEnumerable<Blog>> GetAllBlogsAsync()
+        {
+            var dataBlogs = await _blogService.GetAllBlogsAsync().ConfigureAwait(false);
 
-        //    return dataBlogs;
-        //}
+            var dtoBlogs = _mapper.Map<IEnumerable<Blog>>(dataBlogs);
+
+            return dtoBlogs;
+        }
     }
 }

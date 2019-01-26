@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Middleware
+﻿namespace Configuration.Middleware
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.EntityFrameworkCore;
@@ -6,9 +6,9 @@
     using Patterns.Settings;
     using Data;
 
-    public static class UnitOfWorkInjectorExtension
+    internal static class UnitOfWorkInjectorExtension
     {
-        public static void InjectUnitOfWork(this IServiceCollection services, ISettings settings)
+        internal static void InjectUnitOfWork(this IServiceCollection services, ISettings settings)
         {
             services.AddDbContext<BloggingContext>(options =>
                 options.UseSqlServer(settings.UnitOfWorkConnectionString));

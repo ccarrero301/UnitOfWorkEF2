@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.InternalServices
+﻿namespace Configuration.InternalServices
 {
     using System;
     using Serilog;

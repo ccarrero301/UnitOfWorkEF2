@@ -1,4 +1,4 @@
-﻿namespace BlogsWebApi.Configuration.Builders
+﻿namespace Configuration.Builders
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

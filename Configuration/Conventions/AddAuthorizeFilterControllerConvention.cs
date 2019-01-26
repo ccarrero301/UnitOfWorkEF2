@@ -1,9 +1,9 @@
-﻿namespace BlogsWebApi.Configuration.Conventions
+﻿namespace Configuration.Conventions
 {
     using Microsoft.AspNetCore.Mvc.ApplicationModels;
     using Microsoft.AspNetCore.Mvc.Authorization;
 
-    public class AddAuthorizeFilterControllerConvention : IControllerModelConvention
+    internal class AddAuthorizeFilterControllerConvention : IControllerModelConvention
     {
         public void Apply(ControllerModel controller)
         {
