@@ -7,7 +7,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Configuration;
     using Configuration.InternalServices;
-    using Patterns.Settings;
+    using Shared.Settings;
     
     public class Program
     {

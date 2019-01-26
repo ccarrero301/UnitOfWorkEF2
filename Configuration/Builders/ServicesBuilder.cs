@@ -2,7 +2,7 @@
 {
     using Microsoft.Extensions.DependencyInjection;
     using Middleware;
-    using Patterns.Settings;
+    using Shared.Settings;
     
     public static class ServicesBuilder
     {

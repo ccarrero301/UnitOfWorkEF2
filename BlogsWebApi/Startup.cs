@@ -5,7 +5,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Configuration.Builders;
     using Configuration.InternalServices;
-    using Patterns.Settings;
+    using Shared.Settings;
 
     public class Startup
     {

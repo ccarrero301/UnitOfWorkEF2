@@ -1,7 +1,7 @@
 ﻿namespace Configuration.InternalServices
 {
     using Microsoft.Extensions.Configuration;
-    using Patterns.Settings;
+    using Shared.Settings;
     
     public class ApplicationSettings : ISettings
     {

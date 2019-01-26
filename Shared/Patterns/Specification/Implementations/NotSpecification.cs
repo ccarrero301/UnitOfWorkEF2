@@ -1,4 +1,4 @@
-﻿namespace Patterns.Specification.Implementations
+﻿namespace Shared.Patterns.Specification.Implementations
 {
     using Base;
     using Contracts;

@@ -1,4 +1,4 @@
-﻿namespace Patterns.Specification.Base
+﻿namespace Shared.Patterns.Specification.Base
 {
     using System;
     using System.Linq.Expressions;

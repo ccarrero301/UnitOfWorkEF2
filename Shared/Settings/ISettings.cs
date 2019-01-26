@@ -1,4 +1,4 @@
-﻿namespace Patterns.Settings
+﻿namespace Shared.Settings
 {
     public interface ISettings
     {

@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
-    using Patterns.Settings;
+    using Shared.Settings;
     using Specifications;
     using Contracts;
 

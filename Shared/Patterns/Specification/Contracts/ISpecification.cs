@@ -1,4 +1,4 @@
-﻿namespace Patterns.Specification.Contracts
+﻿namespace Shared.Patterns.Specification.Contracts
 {
     public interface ISpecification<TEntity>
     {
