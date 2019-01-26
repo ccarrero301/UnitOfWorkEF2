@@ -5,6 +5,7 @@
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore.Query;
     using Microsoft.EntityFrameworkCore;
     using Contracts.PagedList;
     using Contracts.Repository;
@@ -103,15 +104,17 @@
         public int Count(Expression<Func<TEntity, bool>> predicate = null) =>
             predicate == null ? DbSet.Count() : DbSet.Count(predicate);
 
-        private IQueryable<TEntity> GetQuery(bool disableTracking, IQueryableSpecification<TEntity> specification = null)
+        private IQueryable<TEntity> GetQuery(bool disableTracking,
+            IQueryableSpecification<TEntity> specification = null)
         {
             IQueryable<TEntity> query = DbSet;
 
             if (disableTracking)
                 query = query.AsNoTracking();
 
-            if (specification?.Include != null)
-                query = specification.Include(query);
+            var includeData = specification?.Include<IIncludableQueryable<TEntity, object>>();
+            if (includeData != null)
+                query = includeData(query);
 
             if (specification?.Predicate != null)
                 query = query.Where(specification.Predicate);

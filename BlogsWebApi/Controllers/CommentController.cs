@@ -1,9 +1,9 @@
 ﻿namespace BlogsWebApi.Controllers
 {
     using System.Threading.Tasks;
-    using DataModel.Models;
     using Microsoft.AspNetCore.Mvc;
-    using Services.Comments;
+    using Data.Comments;
+    using Data.Comments.Contracts;
 
     [Route("api/[controller]")]
     [ApiController]

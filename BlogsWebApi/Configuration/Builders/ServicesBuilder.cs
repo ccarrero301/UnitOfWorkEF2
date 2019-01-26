@@ -1,7 +1,7 @@
 ﻿namespace BlogsWebApi.Configuration.Builders
 {
     using Microsoft.Extensions.DependencyInjection;
-    using Middlewares;
+    using Middleware;
     using Patterns.Settings;
     
     public static class ServicesBuilder
@@ -17,6 +17,8 @@
             services.InjectServices();
 
             services.ConfigureSwagger();
+
+            services.ConfigureAutoMapper();
 
             services.ConfigureMvc();
         }

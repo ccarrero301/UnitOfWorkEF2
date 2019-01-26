@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using DataModel.Models;
-    using Services.Blogs;
+    using Data.Blogs;
+    using Data.Blogs.Contracts;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -12,10 +12,7 @@
     {
         private readonly IBlogService _blogService;
 
-        public BlogController(IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
+        public BlogController(IBlogService blogService) => _blogService = blogService;
 
         [HttpGet]
         [Route("all")]

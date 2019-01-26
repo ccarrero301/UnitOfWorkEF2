@@ -1,4 +1,4 @@
-﻿namespace Services.Users
+﻿namespace Data.Users.Services
 {
     using System;
     using System.Text;
@@ -8,8 +8,9 @@
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
     using Patterns.Settings;
-    using Data.Models;
-    
+    using Specifications;
+    using Contracts;
+
     public class UserService : IUserService
     {
         private readonly ISettings _settings;
