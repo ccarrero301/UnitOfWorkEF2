@@ -2,8 +2,8 @@
 {
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Data.Comments;
-    using Data.Comments.Contracts;
+    using AppServices.Comments.Contracts;
+    using Shared.DTOs;
 
     [Route("api/[controller]")]
     [ApiController]

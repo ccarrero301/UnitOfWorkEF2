@@ -7,8 +7,10 @@
     using AppBlogsServices = AppServices.Blogs.Services;
     using DataBlogsContracts = Data.Blogs.Contracts;
     using DataBlogsServices = Data.Blogs.Services;
-    using Data.Comments.Contracts;
-    using Data.Comments.Services;
+    using AppCommentsContracts = AppServices.Comments.Contracts;
+    using AppCommentsServices = AppServices.Comments.Services;
+    using DataCommentsContracts = Data.Comments.Contracts;
+    using DataCommentsServices = Data.Comments.Services;
     using Data.Posts.Contracts;
     using Data.Posts.Services;
     using Data.Users.Contracts;
@@ -27,9 +29,11 @@
 
             services.AddScoped<DataBlogsContracts.IBlogService, DataBlogsServices.BlogService>();
 
-            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<AppCommentsContracts.ICommentService, AppCommentsServices.CommentService>();
 
-            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<DataCommentsContracts.ICommentService, DataCommentsServices.CommentService>();
+
+            services.AddScoped<IPostService, PostService>();
 
             services.AddScoped<IUserService, UserService>();
         }

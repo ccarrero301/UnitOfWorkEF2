@@ -58,9 +58,9 @@
             return dtoBlog;
         }
 
-        public Task<int> AddBlogAsync(Blog blog)
+        public Task<int> AddBlogAsync(Blog dtoBlog)
         {
-            var domainBlog = _mapper.Map<DomainBlogs.Blog>(blog);
+            var domainBlog = _mapper.Map<DomainBlogs.Blog>(dtoBlog);
 
             return _blogService.AddBlogAsync(domainBlog);
         }
