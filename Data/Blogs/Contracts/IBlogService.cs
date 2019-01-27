@@ -16,7 +16,7 @@
 
         Task<DomainBlogs.Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId);
 
-        Task<int> AddBlogAsync(Blog blog);
+        Task<int> AddBlogAsync(DomainBlogs.Blog domainBlog);
 
         Task<int> DeleteBlogAsync(int blogId);
     }

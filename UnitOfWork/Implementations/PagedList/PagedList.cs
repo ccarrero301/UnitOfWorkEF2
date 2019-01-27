@@ -32,13 +32,15 @@
                     $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
             }
 
+            var sourceAsList = source.ToList();
+
             PageIndex = pageIndex;
             PageSize = pageSize;
             IndexFrom = indexFrom;
-            TotalCount = source.Count();
+            TotalCount = sourceAsList.Count;
             TotalPages = (int) Math.Ceiling(TotalCount / (double) PageSize);
 
-            Items = source.Skip((PageIndex - IndexFrom) * PageSize).Take(PageSize).ToList();
+            Items = sourceAsList.Skip((PageIndex - IndexFrom) * PageSize).Take(PageSize).ToList();
         }
 
         internal PagedList() => Items = Array.Empty<T>();
@@ -71,13 +73,15 @@
                     $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
             }
 
+            var sourceAsList = source.ToList();
+
             PageIndex = pageIndex;
             PageSize = pageSize;
             IndexFrom = indexFrom;
-            TotalCount = source.Count();
+            TotalCount = sourceAsList.Count;
             TotalPages = (int) Math.Ceiling(TotalCount / (double) PageSize);
 
-            var items = source.Skip((PageIndex - IndexFrom) * PageSize).Take(PageSize).ToArray();
+            var items = sourceAsList.Skip((PageIndex - IndexFrom) * PageSize).Take(PageSize).ToArray();
 
             Items = new List<TResult>(converter(items));
         }

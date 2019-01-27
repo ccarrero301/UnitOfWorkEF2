@@ -7,5 +7,17 @@
     public interface IBlogService
     {
         Task<IEnumerable<Blog>> GetAllBlogsAsync();
+
+        Task<string> GetBlogTitleAsync(int blogId);
+
+        Task<Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId);
+
+        Task<Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId);
+
+        Task<Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId);
+
+        Task<int> AddBlogAsync(Blog blog);
+
+        Task<int> DeleteBlogAsync(int blogId);
     }
 }

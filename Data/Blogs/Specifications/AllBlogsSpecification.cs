@@ -11,7 +11,7 @@
         public Expression<Func<Blog, bool>> Predicate => null;
 
         public Func<IQueryable<Blog>, TIncludableQueryable> Include<TIncludableQueryable>() => blogs =>
-            (TIncludableQueryable) (blogs.Include(blog => blog.Posts).ThenInclude(post => post.Comments));
+            (TIncludableQueryable) blogs.Include(blog => blog.Posts).ThenInclude(post => post.Comments);
 
         public Func<IQueryable<Blog>, IOrderedQueryable<Blog>> OrderBy => blogs => blogs.OrderBy(blog => blog.Title);
     }

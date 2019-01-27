@@ -3,9 +3,9 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using UnitOfWork.Contracts.UnitOfWork;
+    using DomainBlogs = Domain.Blogs;
     using Specifications;
     using Contracts;
-    using Domain;
     using AutoMapper;
 
     public class BlogService : IBlogService
@@ -25,10 +25,8 @@
 
             var dataBlogsPagedList = await queryableBlogRepository
                 .GetPagedListAsync(
-                    selector: blog => blog,
-                    specification: new AllBlogsSpecification(),
-                    pageIndex: 0,
-                    pageSize: 20
+                    blog => blog,
+                    new AllBlogsSpecification()
                 ).ConfigureAwait(false);
 
             var domainBlogs = _mapper.Map<IEnumerable<Domain.Blogs.Blog>>(dataBlogsPagedList.Items);
@@ -42,8 +40,8 @@
 
             return queryableBlogRepository
                 .GetFirstOrDefaultAsync(
-                    selector: blog => blog.Title,
-                    specification: new BlogTitleSpecification(blogId)
+                    blog => blog.Title,
+                    new BlogTitleSpecification(blogId)
                 );
         }
 
@@ -52,7 +50,7 @@
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
             var dataBlog = await queryableBlogRepository
-                .GetFirstOrDefaultAsync(specification: new BlogSpecification(blogId)).ConfigureAwait(false);
+                .GetFirstOrDefaultAsync(new BlogSpecification(blogId)).ConfigureAwait(false);
 
             var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
 
@@ -64,7 +62,7 @@
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
             var dataBlog = await queryableBlogRepository
-                .GetFirstOrDefaultAsync(specification: new BlogWithPostsSpecification(blogId)).ConfigureAwait(false);
+                .GetFirstOrDefaultAsync(new BlogWithPostsSpecification(blogId)).ConfigureAwait(false);
 
             var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
 
@@ -77,18 +75,20 @@
 
             var dataBlog =
                 await queryableBlogRepository.GetFirstOrDefaultAsync(
-                    specification: new BlogWithPostsAndCommentsSpecification(blogId));
+                    new BlogWithPostsAndCommentsSpecification(blogId));
 
             var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
 
             return domainBlog;
         }
 
-        public Task<int> AddBlogAsync(Blog blog)
+        public Task<int> AddBlogAsync(DomainBlogs.Blog domainBlog)
         {
+            var dataBlog = _mapper.Map<Blog>(domainBlog);
+
             var blogRepository = _unitOfWork.GetRepository<Blog>();
 
-            blogRepository.Insert(blog);
+            blogRepository.Insert(dataBlog);
 
             return _unitOfWork.SaveChangesAsync();
         }

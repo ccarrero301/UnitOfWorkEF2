@@ -37,7 +37,7 @@
 
             return userQueryableRepository
                 .GetFirstOrDefaultAsync(
-                    specification: new UserByNameSpecification(username)
+                    new UserByNameSpecification(username)
                 );
         }
 
@@ -47,7 +47,7 @@
 
             return queryableUserRepository
                 .GetFirstOrDefaultAsync(
-                    specification: new UserByCredentialsSpecification(username, password)
+                    new UserByCredentialsSpecification(username, password)
                 );
         }
 

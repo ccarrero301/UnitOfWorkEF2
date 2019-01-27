@@ -22,7 +22,7 @@
             var items = await source.Skip((pageIndex - indexFrom) * pageSize)
                 .Take(pageSize).ToListAsync(cancellationToken).ConfigureAwait(false);
 
-            var pagedList = new PagedList<T>()
+            var pagedList = new PagedList<T>
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,

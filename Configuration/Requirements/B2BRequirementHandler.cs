@@ -30,7 +30,7 @@
             return Task.CompletedTask;
         }
 
-        private void SuccessPendingRequirements(AuthorizationHandlerContext context)
+        private static void SuccessPendingRequirements(AuthorizationHandlerContext context)
         {
             foreach (var pendingRequirement in context.PendingRequirements.ToList())
                 context.Succeed(pendingRequirement);

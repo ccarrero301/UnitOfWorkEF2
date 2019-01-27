@@ -1,4 +1,6 @@
-﻿namespace UnitOfWork.Implementations
+﻿using System.Reflection;
+
+namespace UnitOfWork.Implementations
 {
     using System;
     using System.Linq;
@@ -55,21 +57,24 @@
                 .Properties
                 .FirstOrDefault();
 
-            var property = entityType.GetProperty(key?.Name);
+            PropertyInfo property = null;
+            
+            if(key != null)
+                property = entityType.GetProperty(key.Name);
 
+            TEntity entity;
             if (property != null)
             {
-                var entity = Activator.CreateInstance<TEntity>();
+                entity = Activator.CreateInstance<TEntity>();
                 property.SetValue(entity, id);
                 DbContext.Entry(entity).State = EntityState.Deleted;
+                return;
             }
-            else
-            {
-                var entity = DbSet.Find(id);
 
-                if (entity != null)
-                    Delete(entity);
-            }
+            entity = DbSet.Find(id);
+
+            if (entity != null)
+                Delete(entity);
         }
 
         public void Delete(params TEntity[] entities) => DbSet.RemoveRange(entities);
