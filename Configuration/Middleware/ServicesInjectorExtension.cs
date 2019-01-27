@@ -11,10 +11,14 @@
     using AppCommentsServices = AppServices.Comments.Services;
     using DataCommentsContracts = Data.Comments.Contracts;
     using DataCommentsServices = Data.Comments.Services;
-    using Data.Posts.Contracts;
-    using Data.Posts.Services;
-    using Data.Users.Contracts;
-    using Data.Users.Services;
+    using AppPostsContracts = AppServices.Posts.Contracts;
+    using AppPostsServices = AppServices.Posts.Services;
+    using DataPostsContracts = Data.Posts.Contracts;
+    using DataPostsServices = Data.Posts.Services;
+    using AppUsersContracts = AppServices.Users.Contracts;
+    using AppUsersServices = AppServices.Users.Services;
+    using DataUsersContracts = Data.Users.Contracts;
+    using DataUsersServices = Data.Users.Services;
     using Requirements;
 
     internal static class ServicesInjectorExtension
@@ -33,9 +37,13 @@
 
             services.AddScoped<DataCommentsContracts.ICommentService, DataCommentsServices.CommentService>();
 
-            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<AppPostsContracts.IPostService, AppPostsServices.PostService>();
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<DataPostsContracts.IPostService, DataPostsServices.PostService>();
+
+            services.AddScoped<AppUsersContracts.IUserService, AppUsersServices.UserService>();
+
+            services.AddScoped<DataUsersContracts.IUserService, DataUsersServices.UserService>();
         }
     }
 }

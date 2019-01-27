@@ -3,8 +3,8 @@
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Data.Users;
-    using Data.Users.Contracts;
+    using AppServices.Users.Contracts;
+    using Shared.DTOs;
 
     [Authorize(Policy = "Admin")]
     [Route("api/[controller]")]

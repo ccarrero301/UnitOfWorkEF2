@@ -19,7 +19,7 @@
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Domain.Blogs.Blog>> GetAllBlogsAsync()
+        public async Task<IEnumerable<DomainBlogs.Blog>> GetAllBlogsAsync()
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 

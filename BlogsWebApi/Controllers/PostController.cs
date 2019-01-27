@@ -2,8 +2,8 @@
 {
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Data.Posts;
-    using Data.Posts.Contracts;
+    using AppServices.Posts.Contracts;
+    using Shared.DTOs;
 
     [Route("api/[controller]")]
     [ApiController]

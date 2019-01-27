@@ -7,51 +7,59 @@
     using System.Threading.Tasks;
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
+    using DomainUsers = Domain.Users;
     using Shared.Settings;
     using Specifications;
     using Contracts;
-
+    using AutoMapper;
+    
     public class UserService : IUserService
     {
+        private readonly IMapper _mapper;
         private readonly ISettings _settings;
         private readonly IUnitOfWork<BloggingContext> _unitOfWork;
 
-        public UserService(ISettings settings, IUnitOfWork<BloggingContext> unitOfWork)
+        public UserService(IMapper mapper, ISettings settings, IUnitOfWork<BloggingContext> unitOfWork)
         {
+            _mapper = mapper;
             _settings = settings;
             _unitOfWork = unitOfWork;
         }
 
-        public Task<int> AddUserAsync(User user)
+        public Task<int> AddUserAsync(DomainUsers.User domainUser)
         {
+            var dataUser = _mapper.Map<User>(domainUser);
+
             var userRepository = _unitOfWork.GetRepository<User>();
 
-            userRepository.Insert(user);
+            userRepository.Insert(dataUser);
 
             return _unitOfWork.SaveChangesAsync();
         }
 
-        public Task<User> GetUserAsync(string username)
+        public async Task<DomainUsers.User> GetUserAsync(string username)
         {
             var userQueryableRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            return userQueryableRepository
-                .GetFirstOrDefaultAsync(
-                    new UserByNameSpecification(username)
-                );
+            var dataUser = await userQueryableRepository.GetFirstOrDefaultAsync(new UserByNameSpecification(username));
+
+            var domainUser = _mapper.Map<DomainUsers.User>(dataUser);
+
+            return domainUser;
         }
 
-        public Task<User> GetUserAsync(string username, string password)
+        public async Task<DomainUsers.User> GetUserAsync(string username, string password)
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            return queryableUserRepository
-                .GetFirstOrDefaultAsync(
-                    new UserByCredentialsSpecification(username, password)
-                );
+            var dataUser = await queryableUserRepository.GetFirstOrDefaultAsync(new UserByCredentialsSpecification(username, password));
+
+            var domainUser = _mapper.Map<DomainUsers.User>(dataUser);
+
+            return domainUser;
         }
 
-        public async Task<User> AuthenticateUserAsync(User user)
+        public async Task<DomainUsers.User> AuthenticateUserAsync(DomainUsers.User user)
         {
             var authenticatedUser = await GetUserAsync(user.Username, user.Password).ConfigureAwait(false);
 
