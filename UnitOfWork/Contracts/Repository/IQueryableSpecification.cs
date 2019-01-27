@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    
+
     public interface IQueryableSpecification<TEntity>
     {
         Expression<Func<TEntity, bool>> Predicate { get; }

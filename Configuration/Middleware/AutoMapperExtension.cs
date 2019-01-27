@@ -8,10 +8,7 @@
     {
         internal static void ConfigureAutoMapper(this IServiceCollection services)
         {
-            var mappingConfig = new MapperConfiguration(configure =>
-            {
-                configure.AddProfile(new MappingProfile());
-            });
+            var mappingConfig = new MapperConfiguration(configure => { configure.AddProfile(new MappingProfile()); });
 
             var mapper = mappingConfig.CreateMapper();
 

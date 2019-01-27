@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using DomainBlogs = Domain.Blogs;
-    
+
     public interface IBlogService
     {
         Task<IEnumerable<DomainBlogs.Blog>> GetAllBlogsAsync();

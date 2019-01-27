@@ -3,7 +3,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Middleware;
     using Shared.Settings;
-    
+
     public static class ServicesBuilder
     {
         public static void ConfigureServices(this IServiceCollection services, ISettings settings)

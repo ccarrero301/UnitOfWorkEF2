@@ -8,7 +8,7 @@
     using Microsoft.Extensions.Configuration;
     using Configuration.InternalServices;
     using Shared.Settings;
-    
+
     public class Program
     {
         public static void Main(string[] args) => CreateWebHostBuilder(args).Build().Run();

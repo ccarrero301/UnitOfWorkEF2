@@ -12,7 +12,7 @@
     using Specifications;
     using Contracts;
     using AutoMapper;
-    
+
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
@@ -52,7 +52,9 @@
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            var dataUser = await queryableUserRepository.GetFirstOrDefaultAsync(new UserByCredentialsSpecification(username, password));
+            var dataUser =
+                await queryableUserRepository.GetFirstOrDefaultAsync(
+                    new UserByCredentialsSpecification(username, password));
 
             var domainUser = _mapper.Map<DomainUsers.User>(dataUser);
 

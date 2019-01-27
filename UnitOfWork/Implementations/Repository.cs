@@ -58,8 +58,8 @@ namespace UnitOfWork.Implementations
                 .FirstOrDefault();
 
             PropertyInfo property = null;
-            
-            if(key != null)
+
+            if (key != null)
                 property = entityType.GetProperty(key.Name);
 
             TEntity entity;

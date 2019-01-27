@@ -5,7 +5,7 @@
     using DomainComments = Domain.Comments;
     using Contracts;
     using AutoMapper;
-    
+
     public class CommentService : ICommentService
     {
         private readonly IMapper _mapper;

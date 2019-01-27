@@ -5,7 +5,7 @@
     using DomainPosts = Domain.Posts;
     using Contracts;
     using AutoMapper;
-    
+
     public class PostService : IPostService
     {
         private readonly IMapper _mapper;

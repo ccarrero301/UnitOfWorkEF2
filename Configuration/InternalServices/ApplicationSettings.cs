@@ -2,7 +2,7 @@
 {
     using Microsoft.Extensions.Configuration;
     using Shared.Settings;
-    
+
     public class ApplicationSettings : ISettings
     {
         private readonly IConfiguration _configuration;

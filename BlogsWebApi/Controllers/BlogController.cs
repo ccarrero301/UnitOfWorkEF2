@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using AppServices.Blogs.Contracts;
     using Shared.DTOs;
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class BlogController : ControllerBase
