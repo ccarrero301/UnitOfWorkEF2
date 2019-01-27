@@ -24,12 +24,9 @@
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
             var dataBlogsPagedList = await queryableBlogRepository
-                .GetPagedListAsync(
-                    blog => blog,
-                    new AllBlogsSpecification()
-                ).ConfigureAwait(false);
+                .GetPagedListAsync(blog => blog, new AllBlogsSpecification()).ConfigureAwait(false);
 
-            var domainBlogs = _mapper.Map<IEnumerable<Domain.Blogs.Blog>>(dataBlogsPagedList.Items);
+            var domainBlogs = _mapper.Map<IEnumerable<DomainBlogs.Blog>>(dataBlogsPagedList.Items);
 
             return domainBlogs;
         }
@@ -38,44 +35,40 @@
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            return queryableBlogRepository
-                .GetFirstOrDefaultAsync(
-                    blog => blog.Title,
-                    new BlogTitleSpecification(blogId)
-                );
+            return queryableBlogRepository.GetFirstOrDefaultAsync(blog => blog.Title,
+                new BlogTitleSpecification(blogId));
         }
 
-        public async Task<Domain.Blogs.Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId)
+        public async Task<DomainBlogs.Blog> GetBlogNotIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            var dataBlog = await queryableBlogRepository
-                .GetFirstOrDefaultAsync(new BlogSpecification(blogId)).ConfigureAwait(false);
+            var dataBlog = await queryableBlogRepository.GetFirstOrDefaultAsync(new BlogSpecification(blogId))
+                .ConfigureAwait(false);
 
-            var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
+            var domainBlog = _mapper.Map<DomainBlogs.Blog>(dataBlog);
 
             return domainBlog;
         }
 
-        public async Task<Domain.Blogs.Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId)
+        public async Task<DomainBlogs.Blog> GetBlogIncludingPostsAndNotIncludingCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
-            var dataBlog = await queryableBlogRepository
-                .GetFirstOrDefaultAsync(new BlogWithPostsSpecification(blogId)).ConfigureAwait(false);
+            var dataBlog = await queryableBlogRepository.GetFirstOrDefaultAsync(new BlogWithPostsSpecification(blogId))
+                .ConfigureAwait(false);
 
-            var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
+            var domainBlog = _mapper.Map<DomainBlogs.Blog>(dataBlog);
 
             return domainBlog;
         }
 
-        public async Task<Domain.Blogs.Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId)
+        public async Task<DomainBlogs.Blog> GetBlogIncludingPostsAndCommentsAsync(int blogId)
         {
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
             var dataBlog =
-                await queryableBlogRepository.GetFirstOrDefaultAsync(
-                    new BlogWithPostsAndCommentsSpecification(blogId));
+                await queryableBlogRepository.GetFirstOrDefaultAsync(new BlogWithPostsAndCommentsSpecification(blogId));
 
             var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
 
