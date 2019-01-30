@@ -27,10 +27,8 @@
         internal PagedList(IEnumerable<T> source, int pageIndex, int pageSize, int indexFrom)
         {
             if (indexFrom > pageIndex)
-            {
                 throw new ArgumentException(
                     $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
-            }
 
             var sourceAsList = source.ToList();
 
@@ -68,10 +66,8 @@
             int pageIndex, int pageSize, int indexFrom)
         {
             if (indexFrom > pageIndex)
-            {
                 throw new ArgumentException(
                     $"indexFrom: {indexFrom} > pageIndex: {pageIndex}, must indexFrom <= pageIndex");
-            }
 
             var sourceAsList = source.ToList();
 
@@ -98,7 +94,7 @@
         }
     }
 
-    public static class PagedList
+    internal static class PagedList
     {
         public static IPagedList<T> Empty<T>() => new PagedList<T>();
 

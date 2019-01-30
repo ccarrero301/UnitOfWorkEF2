@@ -17,23 +17,16 @@
 
         public TContext DbContext { get; }
 
-        public UnitOfWork(TContext context)
-        {
-            DbContext = context ?? throw new ArgumentNullException(nameof(context));
-        }
+        public UnitOfWork(TContext context) => DbContext = context ?? throw new ArgumentNullException(nameof(context));
 
         public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
         {
             if (_commandRepositories == null)
-            {
                 _commandRepositories = new Dictionary<Type, object>();
-            }
 
             var type = typeof(TEntity);
             if (!_commandRepositories.ContainsKey(type))
-            {
                 _commandRepositories[type] = new Repository<TEntity>(DbContext);
-            }
 
             return (IRepository<TEntity>) _commandRepositories[type];
         }
@@ -41,15 +34,11 @@
         public IQueryableRepository<TEntity> GetQueryableRepository<TEntity>() where TEntity : class
         {
             if (_queryableRepositories == null)
-            {
                 _queryableRepositories = new Dictionary<Type, object>();
-            }
 
             var type = typeof(TEntity);
             if (!_queryableRepositories.ContainsKey(type))
-            {
                 _queryableRepositories[type] = new QueryableRepository<TEntity>(DbContext);
-            }
 
             return (IQueryableRepository<TEntity>) _queryableRepositories[type];
         }
@@ -94,7 +83,6 @@
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
-            {
                 if (disposing)
                 {
                     _commandRepositories?.Clear();
@@ -102,7 +90,6 @@
 
                     DbContext.Dispose();
                 }
-            }
 
             _disposed = true;
         }

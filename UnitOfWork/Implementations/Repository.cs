@@ -1,11 +1,10 @@
-﻿using System.Reflection;
-
-namespace UnitOfWork.Implementations
+﻿namespace UnitOfWork.Implementations
 {
     using System;
-    using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Linq;
     using System.Collections.Generic;
     using Microsoft.EntityFrameworkCore;
     using Contracts.Repository;

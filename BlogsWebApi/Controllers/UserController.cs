@@ -27,6 +27,7 @@
             return Ok(authenticatedUser);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("Add")]
         [Produces(typeof(int))]

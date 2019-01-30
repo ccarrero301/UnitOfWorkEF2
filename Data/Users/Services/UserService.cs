@@ -9,6 +9,7 @@
     using UnitOfWork.Contracts.UnitOfWork;
     using DomainUsers = Domain.Users;
     using Shared.Settings;
+    using Shared.Exceptions;
     using Specifications;
     using Contracts;
     using AutoMapper;
@@ -41,7 +42,8 @@
         {
             var userQueryableRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            var dataUser = await userQueryableRepository.GetFirstOrDefaultAsync(new UserByNameSpecification(username));
+            var dataUser = await userQueryableRepository.GetFirstOrDefaultAsync(new UserByNameSpecification(username))
+                .ConfigureAwait(false);
 
             var domainUser = _mapper.Map<DomainUsers.User>(dataUser);
 
@@ -53,8 +55,9 @@
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
             var dataUser =
-                await queryableUserRepository.GetFirstOrDefaultAsync(
-                    new UserByCredentialsSpecification(username, password));
+                await queryableUserRepository
+                    .GetFirstOrDefaultAsync(new UserByCredentialsSpecification(username, password))
+                    .ConfigureAwait(false);
 
             var domainUser = _mapper.Map<DomainUsers.User>(dataUser);
 
@@ -64,6 +67,9 @@
         public async Task<DomainUsers.User> AuthenticateUserAsync(DomainUsers.User user)
         {
             var authenticatedUser = await GetUserAsync(user.Username, user.Password).ConfigureAwait(false);
+
+            if (authenticatedUser == null)
+                throw new UnauthenticatedUserException("User is not authenticated", user.Username, user.Password);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.JwtGeneratorKey);
