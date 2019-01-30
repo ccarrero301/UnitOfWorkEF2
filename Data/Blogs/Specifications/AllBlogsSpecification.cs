@@ -5,10 +5,13 @@
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using UnitOfWork.Contracts.Repository;
-
-    public class AllBlogsSpecification : IQueryableSpecification<Blog>
+    using Shared.Patterns.Specification.Base;
+    
+    public class AllBlogsSpecification : ExpressionSpecification<Blog>, IQueryableSpecification<Blog>
     {
-        public Expression<Func<Blog, bool>> Predicate => null;
+        public override Expression<Func<Blog, bool>> ToExpression() => null;
+
+        public Expression<Func<Blog, bool>> Predicate => ToExpression();
 
         public Func<IQueryable<Blog>, TIncludableQueryable> Include<TIncludableQueryable>() => blogs =>
             (TIncludableQueryable) blogs.Include(blog => blog.Posts).ThenInclude(post => post.Comments);

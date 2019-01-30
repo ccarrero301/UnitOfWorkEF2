@@ -5,17 +5,17 @@
     using System.Linq.Expressions;
     using UnitOfWork.Contracts.Repository;
     using Shared.Patterns.Specification.Base;
-    
-    public class UserByNameSpecification : ExpressionSpecification<User>, IQueryableSpecification<User>
+
+    public class UserByPasswordSpecification : ExpressionSpecification<User>, IQueryableSpecification<User>
     {
-        private readonly string _userName;
+        private readonly string _password;
 
-        public UserByNameSpecification(string userName) => _userName = userName;
+        public UserByPasswordSpecification(string password) => _password = password;
 
-        public override Expression<Func<User, bool>> ToExpression() => user => user.Username == _userName;
+        public override Expression<Func<User, bool>> ToExpression() => user => user.Password == _password;
 
         public Expression<Func<User, bool>> Predicate => ToExpression();
-           
+        
         public Func<IQueryable<User>, TIncludableQueryable> Include<TIncludableQueryable>() => null;
 
         public Func<IQueryable<User>, IOrderedQueryable<User>> OrderBy => null;
