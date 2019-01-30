@@ -9,7 +9,9 @@
     {
         public abstract bool IsSatisfiedBy(TEntity entityToTest);
 
-        public virtual Func<IQueryable<TEntity>, TResult> ToInclude<TResult>() => null;
+        public virtual Func<IQueryable<TEntity>, TIncludableQueryable> Include<TIncludableQueryable>() => null;
+
+        public virtual Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> OrderBy => null;
 
         public ISpecification<TEntity> And(ISpecification<TEntity> specification) =>
             new AndSpecification<TEntity>(this, specification);
