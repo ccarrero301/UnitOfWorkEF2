@@ -5,7 +5,7 @@
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using Shared.Patterns.Specification.Base;
-    
+
     public class BlogWithPostsAndCommentsSpecification : ExpressionSpecification<Blog>
     {
         private readonly int _blogId;

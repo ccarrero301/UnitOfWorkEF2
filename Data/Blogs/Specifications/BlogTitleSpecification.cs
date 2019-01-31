@@ -5,11 +5,11 @@
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using Shared.Patterns.Specification.Base;
-    
+
     public class BlogTitleSpecification : ExpressionSpecification<Blog>
     {
         private readonly int _blogId;
-       
+
         public BlogTitleSpecification(int blogId) => _blogId = blogId;
 
         public override Expression<Func<Blog, bool>> ToExpression() => blog => blog.Id == _blogId;

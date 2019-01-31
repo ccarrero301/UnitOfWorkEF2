@@ -3,7 +3,7 @@
     using System;
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
-    
+
     public class BlogSpecification : ExpressionSpecification<Blog>
     {
         private readonly int _blogId;

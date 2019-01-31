@@ -22,14 +22,10 @@
             var leftExpressionSpecification = _leftExpressionSpecification.ToExpression();
             var rightExpressionSpecification = _rightExpressionSpecification.ToExpression();
 
-            var exprBody = Expression.AndAlso(leftExpressionSpecification.Body, rightExpressionSpecification.Body);
-            var paramExpr = Expression.Parameter(typeof(TEntity));
+            var expressionBody =
+                Expression.AndAlso(leftExpressionSpecification.Body, rightExpressionSpecification.Body);
 
-            exprBody = (BinaryExpression) new ParameterReplacer(paramExpr).Visit(exprBody);
-
-            var finalExpr = Expression.Lambda<Func<TEntity, bool>>(exprBody, paramExpr);
-
-            return finalExpr;
+            return ExpressionUtilities.GetFinalExpression<TEntity>(expressionBody);
         }
     }
 }

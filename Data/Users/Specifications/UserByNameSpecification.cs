@@ -3,7 +3,7 @@
     using System;
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
-    
+
     public class UserByNameSpecification : ExpressionSpecification<User>
     {
         private readonly string _userName;
