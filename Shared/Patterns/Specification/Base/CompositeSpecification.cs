@@ -1,7 +1,5 @@
 ﻿namespace Shared.Patterns.Specification.Base
 {
-    using System;
-    using System.Linq;
     using Contracts;
     using Implementations;
 

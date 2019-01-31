@@ -56,14 +56,14 @@
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
-            //var userByUserNameSpecification = new UserByNameSpecification(username);
-            //var userByPasswordSpecification = new UserByPasswordSpecification(password);
+            var userByUserNameSpecification = new UserByNameSpecification(username);
+            var userByPasswordSpecification = new UserByPasswordSpecification(password);
 
-            //var userByCredentialsSpecification = userByUserNameSpecification & userByPasswordSpecification;
-            
+            var userByCredentialsSpecification = userByUserNameSpecification & userByPasswordSpecification;
+
             var dataUser =
                 await queryableUserRepository
-                    .GetFirstOrDefaultAsync(new UserByCredentialsSpecification(username, password))
+                    .GetFirstOrDefaultAsync(userByCredentialsSpecification as ExpressionSpecification<User>)
                     .ConfigureAwait(false);
 
             var domainUser = _mapper.Map<DomainUsers.User>(dataUser);

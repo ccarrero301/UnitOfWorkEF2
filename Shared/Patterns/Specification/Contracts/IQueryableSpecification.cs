@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
 
-    public interface IQueryableSpecification<TEntity> : ISpecification<TEntity>
+    public interface IQueryableSpecification<TEntity>
     {
          Func<IQueryable<TEntity>, TIncludableQueryable> Include<TIncludableQueryable>();
 

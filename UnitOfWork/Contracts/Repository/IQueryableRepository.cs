@@ -10,35 +10,35 @@
 
     public interface IQueryableRepository<TEntity> where TEntity : class
     {
-        IPagedList<TEntity> GetPagedList(QueryableExpressionSpecification<TEntity> specification = null,
+        IPagedList<TEntity> GetPagedList(ExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true);
 
-        Task<IPagedList<TEntity>> GetPagedListAsync(QueryableExpressionSpecification<TEntity> specification = null,
+        Task<IPagedList<TEntity>> GetPagedListAsync(ExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken));
 
         IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
-            QueryableExpressionSpecification<TEntity> specification = null,
+            ExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true) where TResult : class;
 
         Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            QueryableExpressionSpecification<TEntity> specification = null,
+            ExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken)) where TResult : class;
 
-        Task<TEntity> GetFirstOrDefaultAsync(QueryableExpressionSpecification<TEntity> specification = null,
+        Task<TEntity> GetFirstOrDefaultAsync(ExpressionSpecification<TEntity> specification = null,
             bool disableTracking = true);
 
         Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            QueryableExpressionSpecification<TEntity> specification = null,
+            ExpressionSpecification<TEntity> specification = null,
             bool disableTracking = true);
 
         IQueryable<TEntity> FromSql(string sql, params object[] parameters);

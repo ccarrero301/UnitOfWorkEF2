@@ -4,7 +4,7 @@
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
     
-    public class BlogSpecification : QueryableExpressionSpecification<Blog>
+    public class BlogSpecification : ExpressionSpecification<Blog>
     {
         private readonly int _blogId;
 

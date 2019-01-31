@@ -3,10 +3,8 @@
     using System;
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
-    using Shared.Patterns.Specification.Contracts;
-
-
-    public class UserByNameSpecification : QueryableExpressionSpecification<User>
+    
+    public class UserByNameSpecification : ExpressionSpecification<User>
     {
         private readonly string _userName;
 

@@ -6,7 +6,7 @@
     using Microsoft.EntityFrameworkCore;
     using Shared.Patterns.Specification.Base;
     
-    public class BlogTitleSpecification : QueryableExpressionSpecification<Blog>
+    public class BlogTitleSpecification : ExpressionSpecification<Blog>
     {
         private readonly int _blogId;
        
@@ -16,6 +16,5 @@
 
         public override Func<IQueryable<Blog>, TIncludableQueryable> Include<TIncludableQueryable>() => blogs =>
             (TIncludableQueryable) blogs.Include(blog => blog.Posts).ThenInclude(post => post.Comments);
-
     }
 }

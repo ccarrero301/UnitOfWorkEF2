@@ -4,7 +4,7 @@
     using System.Linq;
     using Contracts;
 
-    public abstract class QueryableExpressionSpecification<TEntity> : ExpressionSpecification<TEntity>, IQueryableSpecification<TEntity>
+    public abstract class QueryableExpressionSpecification<TEntity> : IQueryableSpecification<TEntity>
     {
         public virtual Func<IQueryable<TEntity>, TIncludableQueryable> Include<TIncludableQueryable>() => null;
 
