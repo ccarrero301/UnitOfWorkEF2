@@ -5,7 +5,7 @@
 
     public abstract class ExpressionSpecification<TEntity> : CompositeSpecification<TEntity>
     {
-        public abstract Expression<Func<TEntity, bool>> ToExpression();
+        public virtual Expression<Func<TEntity, bool>> ToExpression() => null;
 
         public override bool IsSatisfiedBy(TEntity entityToTest)
         {

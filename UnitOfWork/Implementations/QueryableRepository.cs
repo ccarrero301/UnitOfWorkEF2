@@ -9,6 +9,7 @@
     using Microsoft.EntityFrameworkCore;
     using Contracts.PagedList;
     using Contracts.Repository;
+    using Shared.Patterns.Specification.Base;
     using PagedList;
 
     internal class QueryableRepository<TEntity> : IQueryableRepository<TEntity> where TEntity : class
@@ -22,7 +23,7 @@
             DbSet = DbContext.Set<TEntity>();
         }
 
-        public IPagedList<TEntity> GetPagedList(IQueryableSpecification<TEntity> specification = null,
+        public IPagedList<TEntity> GetPagedList(QueryableExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true)
@@ -33,7 +34,7 @@
                    query.ToPagedList(pageIndex, pageSize);
         }
 
-        public Task<IPagedList<TEntity>> GetPagedListAsync(IQueryableSpecification<TEntity> specification = null,
+        public Task<IPagedList<TEntity>> GetPagedListAsync(QueryableExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
@@ -46,7 +47,7 @@
         }
 
         public IPagedList<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
-            IQueryableSpecification<TEntity> specification = null,
+            QueryableExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true)
@@ -59,7 +60,7 @@
         }
 
         public Task<IPagedList<TResult>> GetPagedListAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            IQueryableSpecification<TEntity> specification = null,
+            QueryableExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,
@@ -73,7 +74,7 @@
                        .ToPagedListAsync(pageIndex, pageSize, 0, cancellationToken);
         }
 
-        public Task<TEntity> GetFirstOrDefaultAsync(IQueryableSpecification<TEntity> specification = null,
+        public Task<TEntity> GetFirstOrDefaultAsync(QueryableExpressionSpecification<TEntity> specification = null,
             bool disableTracking = true)
         {
             var query = GetQuery(disableTracking, specification);
@@ -82,7 +83,7 @@
         }
 
         public Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> selector,
-            IQueryableSpecification<TEntity> specification = null,
+            QueryableExpressionSpecification<TEntity> specification = null,
             bool disableTracking = true)
         {
             var query = GetQuery(disableTracking, specification);
@@ -105,7 +106,7 @@
             predicate == null ? DbSet.Count() : DbSet.Count(predicate);
 
         private IQueryable<TEntity> GetQuery(bool disableTracking,
-            IQueryableSpecification<TEntity> specification = null)
+            QueryableExpressionSpecification<TEntity> specification = null)
         {
             IQueryable<TEntity> query = DbSet;
 
@@ -116,8 +117,8 @@
             if (includeData != null)
                 query = includeData(query);
 
-            if (specification?.Predicate != null)
-                query = query.Where(specification.Predicate);
+            if (specification?.ToExpression() != null)
+                query = query.Where(specification.ToExpression());
 
             return query;
         }

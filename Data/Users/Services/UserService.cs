@@ -8,11 +8,13 @@
     using Microsoft.IdentityModel.Tokens;
     using UnitOfWork.Contracts.UnitOfWork;
     using DomainUsers = Domain.Users;
+    using Shared.Patterns.Specification.Base;
     using Shared.Settings;
     using Shared.Exceptions;
     using Specifications;
     using Contracts;
     using AutoMapper;
+
 
     public class UserService : IUserService
     {
@@ -54,6 +56,11 @@
         {
             var queryableUserRepository = _unitOfWork.GetQueryableRepository<User>();
 
+            //var userByUserNameSpecification = new UserByNameSpecification(username);
+            //var userByPasswordSpecification = new UserByPasswordSpecification(password);
+
+            //var userByCredentialsSpecification = userByUserNameSpecification & userByPasswordSpecification;
+            
             var dataUser =
                 await queryableUserRepository
                     .GetFirstOrDefaultAsync(new UserByCredentialsSpecification(username, password))
