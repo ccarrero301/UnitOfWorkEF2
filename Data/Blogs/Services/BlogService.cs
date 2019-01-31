@@ -68,7 +68,8 @@
             var queryableBlogRepository = _unitOfWork.GetQueryableRepository<Blog>();
 
             var dataBlog =
-                await queryableBlogRepository.GetFirstOrDefaultAsync(new BlogWithPostsAndCommentsSpecification(blogId));
+                await queryableBlogRepository.GetFirstOrDefaultAsync(new BlogWithPostsAndCommentsSpecification(blogId))
+                    .ConfigureAwait(false);
 
             var domainBlog = _mapper.Map<Domain.Blogs.Blog>(dataBlog);
 

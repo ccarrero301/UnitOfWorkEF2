@@ -1,5 +1,6 @@
 ﻿namespace BlogsWebApi.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using AppServices.Posts.Contracts;
@@ -24,6 +25,16 @@
             var numberOfRecords = await _postService.AddPostToBlogAsync(post).ConfigureAwait(false);
 
             return Ok(numberOfRecords);
+        }
+
+        [HttpGet]
+        [Route("Blog/{blogId:int}/ContainsInContent/{word}")]
+        [Produces(typeof(IEnumerable<Post>))]
+        public async Task<IActionResult> GetPostsFromBlogContainingWord(int blogId, string word)
+        {
+            var posts = await _postService.GetPostsFromBlogContainingWordAsync(blogId, word).ConfigureAwait(false);
+
+            return Ok(posts);
         }
     }
 }

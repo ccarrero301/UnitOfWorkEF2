@@ -1,5 +1,6 @@
 ﻿namespace AppServices.Posts.Services
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using DataPostsContracts = Data.Posts.Contracts;
     using DomainPosts = Domain.Posts;
@@ -23,6 +24,16 @@
             var domainPost = _mapper.Map<DomainPosts.Post>(dtoPost);
 
             return _postService.AddPostToBlogAsync(domainPost);
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsFromBlogContainingWordAsync(int blogId, string word)
+        {
+            var domainPosts =
+                await _postService.GetPostsFromBlogContainingWordAsync(blogId, word).ConfigureAwait(false);
+
+            var dtoPosts = _mapper.Map<IEnumerable<Post>>(domainPosts);
+
+            return dtoPosts;
         }
     }
 }
