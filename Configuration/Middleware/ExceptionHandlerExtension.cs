@@ -15,6 +15,7 @@
         {
             HandleGeneralExceptionErrors(applicationBuilder, log);
             HandleUserUnauthenticatedExceptionErrors(applicationBuilder, log);
+            HandleSpecificationOrderByExceptionErrors(applicationBuilder, log);
         }
 
         private static void HandleGeneralExceptionErrors(IApplicationBuilder app, ILog log)
@@ -68,6 +69,31 @@
                         log.LogException(
                             $"Authentication attempt with user name {unauthenticatedUserException.AttemptedUser} and password {unauthenticatedUserException.AttemptedPassword}",
                             unauthenticatedUserException);
+
+                    return Task.CompletedTask;
+                });
+            });
+        }
+
+        private static void HandleSpecificationOrderByExceptionErrors(IApplicationBuilder app, ILog log)
+        {
+            app.UseGlobalExceptionHandler(x =>
+            {
+                x.ContentType = "application/json";
+                x.ResponseBody(s => JsonConvert.SerializeObject(new
+                {
+                    Message = "This is the general error"
+                }));
+
+                x.Map<SpecificationOrderByException>().ToStatusCode(StatusCodes.Status401Unauthorized)
+                    .WithBody((ex, context) => JsonConvert.SerializeObject(new
+                    {
+                        Message = "Order by configuration is not correct!"
+                    }));
+
+                x.OnError((exception, httpContext) =>
+                {
+                    log.LogException("Exception Found {@data}", exception);
 
                     return Task.CompletedTask;
                 });

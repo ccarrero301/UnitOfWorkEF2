@@ -37,10 +37,12 @@
 
             var postByBlogIdSpecification = new PostByBlogIdSpecification(blogId);
             var postContainsWordInContentSpecification = new PostContainsWordInContentSpecification(word);
-            var postSpecification = postByBlogIdSpecification & postContainsWordInContentSpecification;
+
+            var postSpecification =
+                (postByBlogIdSpecification & postContainsWordInContentSpecification) as ExpressionSpecification<Post>;
 
             var dataPostsPagedList = await queryablePostRepository
-                .GetPagedListAsync(postSpecification as ExpressionSpecification<Post>).ConfigureAwait(false);
+                .GetPagedListAsync(postSpecification).ConfigureAwait(false);
 
             var domainPosts = _mapper.Map<IEnumerable<DomainPosts.Post>>(dataPostsPagedList.Items);
 

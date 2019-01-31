@@ -25,6 +25,10 @@
             var expressionBody =
                 Expression.AndAlso(leftExpressionSpecification.Body, rightExpressionSpecification.Body);
 
+            var orderBy = ExpressionUtilities.GetOrderByExpression(_leftExpressionSpecification, _rightExpressionSpecification);
+
+            SetOrderBy(orderBy);
+
             return ExpressionUtilities.GetFinalExpression<TEntity>(expressionBody);
         }
     }
