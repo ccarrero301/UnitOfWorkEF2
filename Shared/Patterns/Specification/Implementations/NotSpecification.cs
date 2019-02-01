@@ -3,7 +3,7 @@
     using Base;
     using Contracts;
 
-    internal sealed class NotSpecification<TEntity> : CompositeSpecification<TEntity>
+    internal sealed class NotSpecification<TEntity> : ExpressionSpecification<TEntity>
     {
         private readonly ISpecification<TEntity> _specification;
 

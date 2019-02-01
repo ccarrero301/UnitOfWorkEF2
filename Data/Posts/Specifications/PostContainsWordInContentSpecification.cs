@@ -5,7 +5,7 @@
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
 
-    public class PostContainsWordInContentSpecification : ExpressionSpecification<Post>
+    public class PostContainsWordInContentSpecification : QueryableExpressionSpecification<Post>
     {
         private readonly string _word;
 

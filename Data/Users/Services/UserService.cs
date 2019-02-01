@@ -63,7 +63,7 @@
 
             var dataUser =
                 await queryableUserRepository
-                    .GetFirstOrDefaultAsync(userByCredentialsSpecification as ExpressionSpecification<User>)
+                    .GetFirstOrDefaultAsync(userByCredentialsSpecification as QueryableExpressionSpecification<User>)
                     .ConfigureAwait(false);
 
             var domainUser = _mapper.Map<DomainUsers.User>(dataUser);

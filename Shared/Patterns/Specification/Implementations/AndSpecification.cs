@@ -3,7 +3,7 @@
     using Base;
     using Contracts;
 
-    internal sealed class AndSpecification<TEntity> : CompositeSpecification<TEntity>
+    internal sealed class AndSpecification<TEntity> : ExpressionSpecification<TEntity>
     {
         private readonly ISpecification<TEntity> _leftSpecification;
         private readonly ISpecification<TEntity> _rightSpecification;

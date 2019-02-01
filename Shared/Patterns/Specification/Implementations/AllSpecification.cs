@@ -2,7 +2,7 @@
 {
     using Base;
 
-    internal sealed class AllSpecification<TEntity> : CompositeSpecification<TEntity>
+    internal sealed class AllSpecification<TEntity> : ExpressionSpecification<TEntity>
     {
         public override bool IsSatisfiedBy(TEntity entityToTest) => true;
     }

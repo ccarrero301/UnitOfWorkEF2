@@ -6,7 +6,7 @@
     using Microsoft.EntityFrameworkCore;
     using Shared.Patterns.Specification.Base;
 
-    public class BlogWithPostsSpecification : ExpressionSpecification<Blog>
+    public class BlogWithPostsSpecification : QueryableExpressionSpecification<Blog>
     {
         private readonly int _blogId;
 

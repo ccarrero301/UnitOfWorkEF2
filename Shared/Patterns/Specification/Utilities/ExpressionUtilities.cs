@@ -17,8 +17,9 @@
             return Expression.Lambda<Func<TEntity, bool>>(expressionBody, paramExpr);
         }
 
-        public static Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> GetOrderByExpression<TEntity>(ExpressionSpecification<TEntity> leftExpressionSpecification,
-            ExpressionSpecification<TEntity> rightExpressionSpecification)
+        public static Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> GetOrderByExpression<TEntity>(
+            QueryableExpressionSpecification<TEntity> leftExpressionSpecification,
+            QueryableExpressionSpecification<TEntity> rightExpressionSpecification)
         {
             var isLeftExpressionSpecificationOrderByDefined = leftExpressionSpecification.OrderBy != null;
             var isRightExpressionSpecificationOrderByDefined = rightExpressionSpecification.OrderBy != null;

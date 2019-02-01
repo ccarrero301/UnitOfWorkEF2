@@ -5,13 +5,13 @@
     using Utilities;
     using Base;
 
-    public class AndExpressionSpecification<TEntity> : ExpressionSpecification<TEntity>
+    public class AndExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
     {
-        private readonly ExpressionSpecification<TEntity> _leftExpressionSpecification;
-        private readonly ExpressionSpecification<TEntity> _rightExpressionSpecification;
+        private readonly QueryableExpressionSpecification<TEntity> _leftExpressionSpecification;
+        private readonly QueryableExpressionSpecification<TEntity> _rightExpressionSpecification;
 
-        public AndExpressionSpecification(ExpressionSpecification<TEntity> leftExpressionSpecification,
-            ExpressionSpecification<TEntity> rightExpressionSpecification)
+        public AndExpressionSpecification(QueryableExpressionSpecification<TEntity> leftExpressionSpecification,
+            QueryableExpressionSpecification<TEntity> rightExpressionSpecification)
         {
             _rightExpressionSpecification = rightExpressionSpecification;
             _leftExpressionSpecification = leftExpressionSpecification;

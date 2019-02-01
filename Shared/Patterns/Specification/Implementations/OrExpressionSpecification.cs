@@ -5,13 +5,13 @@
     using Utilities;
     using Base;
 
-    public class OrExpressionSpecification<TEntity> : ExpressionSpecification<TEntity>
+    public class OrExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
     {
-        private readonly ExpressionSpecification<TEntity> _leftExpressionSpecification;
-        private readonly ExpressionSpecification<TEntity> _rightExpressionSpecification;
+        private readonly QueryableExpressionSpecification<TEntity> _leftExpressionSpecification;
+        private readonly QueryableExpressionSpecification<TEntity> _rightExpressionSpecification;
 
-        public OrExpressionSpecification(ExpressionSpecification<TEntity> leftExpressionSpecification,
-            ExpressionSpecification<TEntity> rightExpressionSpecification)
+        public OrExpressionSpecification(QueryableExpressionSpecification<TEntity> leftExpressionSpecification,
+            QueryableExpressionSpecification<TEntity> rightExpressionSpecification)
         {
             _rightExpressionSpecification = rightExpressionSpecification;
             _leftExpressionSpecification = leftExpressionSpecification;

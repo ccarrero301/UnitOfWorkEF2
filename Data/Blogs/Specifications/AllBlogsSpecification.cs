@@ -2,11 +2,14 @@
 {
     using System;
     using System.Linq;
+    using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore;
     using Shared.Patterns.Specification.Base;
 
-    public class AllBlogsSpecification : ExpressionSpecification<Blog>
+    public class AllBlogsSpecification : QueryableExpressionSpecification<Blog>
     {
+        public override Expression<Func<Blog, bool>> ToExpression() => null;
+
         public override Func<IQueryable<Blog>, TIncludableQueryable> Include<TIncludableQueryable>() => blogs =>
             (TIncludableQueryable) blogs.Include(blog => blog.Posts).ThenInclude(post => post.Comments);
 

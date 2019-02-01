@@ -4,7 +4,7 @@
     using System.Linq.Expressions;
     using Shared.Patterns.Specification.Base;
 
-    public class UserByNameSpecification : ExpressionSpecification<User>
+    public class UserByNameSpecification : QueryableExpressionSpecification<User>
     {
         private readonly string _userName;
 

@@ -1,43 +1,31 @@
 ﻿namespace Shared.Patterns.Specification.Base
 {
-    using System;
-    using System.Linq.Expressions;
-    using Implementations;
     using Contracts;
+    using Implementations;
 
-    public abstract class ExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>,
-        ISpecification<TEntity>
+    public abstract class ExpressionSpecification<TEntity> : ISpecification<TEntity>
     {
-        public virtual Expression<Func<TEntity, bool>> ToExpression() => null;
-
-        public bool IsSatisfiedBy(TEntity entityToTest)
-        {
-            var predicate = ToExpression().Compile();
-            return predicate(entityToTest);
-        }
+        public abstract bool IsSatisfiedBy(TEntity entityToTest);
 
         public ISpecification<TEntity> And(ISpecification<TEntity> specification) =>
-            new AndExpressionSpecification<TEntity>(this, specification as ExpressionSpecification<TEntity>);
+            new AndSpecification<TEntity>(this, specification);
 
-        public static ISpecification<TEntity> operator &(ExpressionSpecification<TEntity> specificationLeft,
+        public static ExpressionSpecification<TEntity> operator &(ExpressionSpecification<TEntity> specificationLeft,
             ExpressionSpecification<TEntity> specificationRight) =>
-            new AndExpressionSpecification<TEntity>(specificationLeft, specificationRight);
+            new AndSpecification<TEntity>(specificationLeft, specificationRight);
 
         public ISpecification<TEntity> Or(ISpecification<TEntity> specification) =>
-            new OrExpressionSpecification<TEntity>(this, specification as ExpressionSpecification<TEntity>);
+            new OrSpecification<TEntity>(this, specification);
 
-        public static ISpecification<TEntity> operator |(ExpressionSpecification<TEntity> specificationLeft,
+        public static ExpressionSpecification<TEntity> operator |(ExpressionSpecification<TEntity> specificationLeft,
             ExpressionSpecification<TEntity> specificationRight) =>
-            new OrExpressionSpecification<TEntity>(specificationLeft, specificationRight);
+            new OrSpecification<TEntity>(specificationLeft, specificationRight);
 
-        public ISpecification<TEntity> Not()
-        {
-            throw new NotImplementedException();
-        }
+        public ISpecification<TEntity> Not() => new NotSpecification<TEntity>(this);
 
-        public ISpecification<TEntity> All()
-        {
-            throw new NotImplementedException();
-        }
+        public static ExpressionSpecification<TEntity> operator !(ExpressionSpecification<TEntity> specification) =>
+            new NotSpecification<TEntity>(specification);
+
+        public ISpecification<TEntity> All() => new AllSpecification<TEntity>();
     }
 }
