@@ -39,7 +39,8 @@
             var postContainsWordInContentSpecification = new PostContainsWordInContentSpecification(word);
 
             var postSpecification =
-                (postByBlogIdSpecification & postContainsWordInContentSpecification) as QueryableExpressionSpecification<Post>;
+                (postByBlogIdSpecification & postContainsWordInContentSpecification) as
+                QueryableExpressionSpecification<Post>;
 
             var dataPostsPagedList = await queryablePostRepository
                 .GetPagedListAsync(postSpecification).ConfigureAwait(false);

@@ -34,7 +34,8 @@
                    query.ToPagedList(pageIndex, pageSize);
         }
 
-        public Task<IPagedList<TEntity>> GetPagedListAsync(QueryableExpressionSpecification<TEntity> specification = null,
+        public Task<IPagedList<TEntity>> GetPagedListAsync(
+            QueryableExpressionSpecification<TEntity> specification = null,
             int pageIndex = 0,
             int pageSize = 20,
             bool disableTracking = true,

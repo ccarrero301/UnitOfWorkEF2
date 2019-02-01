@@ -17,6 +17,15 @@
             return Expression.Lambda<Func<TEntity, bool>>(expressionBody, paramExpr);
         }
 
+        public static Expression<Func<TEntity, bool>> GetFinalExpression<TEntity>(UnaryExpression expressionBody)
+        {
+            var paramExpr = Expression.Parameter(typeof(TEntity));
+
+            expressionBody = (UnaryExpression) new ParameterReplacer(paramExpr).Visit(expressionBody);
+
+            return Expression.Lambda<Func<TEntity, bool>>(expressionBody, paramExpr);
+        }
+
         public static Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> GetOrderByExpression<TEntity>(
             QueryableExpressionSpecification<TEntity> leftExpressionSpecification,
             QueryableExpressionSpecification<TEntity> rightExpressionSpecification)
@@ -33,5 +42,8 @@
 
             return isRightExpressionSpecificationOrderByDefined ? rightExpressionSpecification.OrderBy : null;
         }
+
+        public static Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> GetOrderByExpression<TEntity>(
+            QueryableExpressionSpecification<TEntity> expressionSpecification) => expressionSpecification.OrderBy;
     }
 }

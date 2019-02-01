@@ -5,7 +5,7 @@
     using Utilities;
     using Base;
 
-    public class OrExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
+    internal sealed class OrExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
     {
         private readonly QueryableExpressionSpecification<TEntity> _leftExpressionSpecification;
         private readonly QueryableExpressionSpecification<TEntity> _rightExpressionSpecification;

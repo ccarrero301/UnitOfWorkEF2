@@ -29,10 +29,9 @@
             QueryableExpressionSpecification<TEntity> specificationRight) =>
             new OrExpressionSpecification<TEntity>(specificationLeft, specificationRight);
 
-        public ISpecification<TEntity> Not()
-        {
-            throw new NotImplementedException();
-        }
+        public ISpecification<TEntity> Not() => new NotExpressionSpecification<TEntity>(this);
+
+        public static ISpecification<TEntity> operator !(QueryableExpressionSpecification<TEntity> specification) => new NotExpressionSpecification<TEntity>(specification);
 
         public ISpecification<TEntity> All()
         {

@@ -2,7 +2,7 @@
 {
     using System.Linq.Expressions;
 
-    internal class ParameterReplacer : ExpressionVisitor
+    internal sealed class ParameterReplacer : ExpressionVisitor
     {
         private readonly ParameterExpression _parameter;
 

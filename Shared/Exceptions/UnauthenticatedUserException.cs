@@ -8,7 +8,8 @@
 
         public string AttemptedPassword { get; }
 
-        public UnauthenticatedUserException(string message, string attemptedUser, string attemptedPassword) : base(message)
+        public UnauthenticatedUserException(string message, string attemptedUser, string attemptedPassword) :
+            base(message)
         {
             AttemptedUser = attemptedUser;
             AttemptedPassword = attemptedPassword;

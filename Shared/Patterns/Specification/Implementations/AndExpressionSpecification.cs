@@ -5,7 +5,7 @@
     using Utilities;
     using Base;
 
-    public class AndExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
+    internal sealed class AndExpressionSpecification<TEntity> : QueryableExpressionSpecification<TEntity>
     {
         private readonly QueryableExpressionSpecification<TEntity> _leftExpressionSpecification;
         private readonly QueryableExpressionSpecification<TEntity> _rightExpressionSpecification;
@@ -25,7 +25,8 @@
             var expressionBody =
                 Expression.AndAlso(leftExpressionSpecification.Body, rightExpressionSpecification.Body);
 
-            var orderBy = ExpressionUtilities.GetOrderByExpression(_leftExpressionSpecification, _rightExpressionSpecification);
+            var orderBy =
+                ExpressionUtilities.GetOrderByExpression(_leftExpressionSpecification, _rightExpressionSpecification);
 
             SetOrderBy(orderBy);
 
